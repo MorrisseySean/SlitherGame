@@ -83,33 +83,57 @@ MapManager.prototype.DrawBuilding = function(buildingNo, posX, posY, offsetX, of
 	}
 }
 
-MapManager.prototype.WallCollisionX = function(playerX, playerY)
+MapManager.prototype.WallCollision = function(playerPos, playerVel, playerSize)
 {
-	//Detect collisions between the player and the walls	
-	var xPos = Math.floor(playerX/this.size)
-	var yPos = Math.floor(playerY/this.size)
+	//Detect collisions between the player and the walls
+	var xPos = 0;
+	var yPos = 0;
+	if(playerVel.x > 0)
+	{
+		xPos = Math.floor(((playerPos.x + playerSize) + playerVel.x)/this.size)
+	}
+	else
+	{
+		xPos = Math.floor(((playerPos.x - playerSize) + playerVel.x)/this.size)
+	}
+	if(playerVel.y > 0)
+	{
+		yPos = Math.floor(((playerPos.y + playerSize) + playerVel.y)/this.size)
+	}
+	else
+	{
+		yPos = Math.floor(((playerPos.y - playerSize) + playerVel.y)/this.size)
+	}
+	if(xPos < 0 || xPos > this.size * this.building[0].length * this.map.length||yPos < 0||yPos > this.size * this.building[0].length * this.map.length)
+	{
+		//If the player is at the edge of the screen don't move.
+		return playerPos;
+	}
 	
 	//Find which map location the player is in
-	var xIndex = Math.floor(xPos/this.building[0].length);	
-	var yIndex = Math.floor(yPos/this.building[0].length);
+	xIndex = Math.floor(xPos/this.building[0].length);	
+	yIndex = Math.floor(yPos/this.building[0].length);
 	
 	//Find which building is located in the same position as the player
 	var buildingNo = this.map[yIndex][xIndex] - 1;
 	if(buildingNo < 0)
 	{
-		return true;
+		return new Vector2(playerPos.x + playerVel.x, playerPos.y + playerVel.y);
 	}
-	
-	//Find what position the player is in that building square
-	var buildPosX = xPos - (xIndex * this.building[0].length);
-	var buildPosY = yPos - (yIndex * this.building[0].length);
-	return false;
-	
+	else
+	{
+		//Find what position the player is in that building square
+		var buildPosX = xPos - (xIndex * this.building[0].length);
+		var buildPosY = yPos - (yIndex * this.building[0].length);
+		//If the player's moved position would put it inside a building wall, don't move the player
+		if(this.building[buildingNo][buildPosY][buildPosX] == 1)
+		{
+			return playerPos;
+		}
+		else
+		{
+			return new Vector2(playerPos.x + playerVel.x, playerPos.y + playerVel.y);
+		}
+	}	
 }
 
-MapManager.prototype.WallCollisionY = function(playerX, playerY, dir)
-{
-	xIndex = Math.floor((playerX/this.size)/this.map.length);
-	
-	yIndex = Math.floor((playerY/this.size)/this.map.length);
-}

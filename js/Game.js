@@ -1,4 +1,4 @@
-var canvasCtx;
+var canvasCtx, maps;
 
 function Game()
 {
@@ -6,7 +6,7 @@ function Game()
 	this.player = new Player(50, 50, 50);
 	
 	//Set up map manager
-	this.maps = new MapManager();
+	//this.maps = new MapManager();
 	
 	//Sets up the camera
 	this.cam = new Camera();
@@ -20,7 +20,7 @@ function Game()
 
 Game.prototype.initGame = function()
 {
-	this.maps.init(200);
+	maps.init(200);
 	this.cam.init(10000, 10000, canvas.width, canvas.height);
 }
 Game.prototype.initCanvas = function()
@@ -39,7 +39,11 @@ Game.prototype.initCanvas = function()
 	canvas.setAttribute('tabindex', '0');
 	canvas.focus();
 }
-
+Game.prototype.initMaps = function()
+{
+	//Set up the map manager 
+	maps = new MapManager();
+}
 function onKeyPress(e)
 {//Places user input into the keys map
 	if (e.keyCode == 87 || e.keyCode == 38)
@@ -76,8 +80,8 @@ function onKeyUp(e)
 
 Game.prototype.gameLoop = function()
 {//Deals with all runtime events during gameplay
-	game.maps.WallCollisionX(game.player.getX(), game.player.getY());
-	game.maps.WallCollisionY(game.player.getX(), game.player.getY());
+	//game.maps.WallCollisionX(game.player.getPos());
+	//game.maps.WallCollisionY(game.player.getX(), game.player.getY());
 	game.player.walk(game.keys);
 	game.cam.update(game.player.getX(), game.player.getY());
 	game.Draw();
@@ -93,5 +97,5 @@ Game.prototype.Draw = function()
 	//Call player draw method
 	this.player.Draw(this.cam.getX(), this.cam.getY());
 	//Call map draw method
-	this.maps.Draw(this.cam.getX(), this.cam.getY());
+	maps.Draw(this.cam.getX(), this.cam.getY());
 }
