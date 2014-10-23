@@ -1,4 +1,4 @@
-var canvasCtx, maps;
+var canvasCtx, audioCtx, maps;
 
 function Game()
 {
@@ -17,13 +17,20 @@ function Game()
 	this.keys["right"] = false;
 	this.keys["left"] = false;
 }
-
+Game.prototype.init = function()
+{
+	this.initCanvas();
+	this.initAudio();
+	this.initMaps();
+	this.initGame();
+}
 Game.prototype.initGame = function()
 {
 	maps.init(200);
 	maps.GenerateMap();
 	this.player.Load(canvas.width * 2, canvas.width * 2);
 	this.enemy.Load();
+	this.audio.Load();
 	this.cam.init(10000, 10000, canvas.width, canvas.height);
 	
 }
@@ -44,6 +51,20 @@ Game.prototype.initCanvas = function()
 	canvas.setAttribute('tabindex', '0');
 	canvas.focus();
 }
+Game.prototype.initAudio = function()
+{
+	try 
+	{
+		window.AudioContext = window.AudioContext||window.webkitAudioContext;
+		audioCtx = new AudioContext();
+	}
+	catch(e) 
+	{
+		alert('Web Audio API is not supported in this browser');
+	}
+	this.audio = new AudioManager();
+}
+
 Game.prototype.initMaps = function()
 {
 	//Set up the map manager 

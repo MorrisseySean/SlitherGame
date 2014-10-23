@@ -3,9 +3,7 @@ var game;
 function main()
 {
 	game = new Game();
-	game.initCanvas();
-	game.initMaps();
-	game.initGame();
+	game.init();
 	game.gameLoop();
 	game.Draw();
 }
