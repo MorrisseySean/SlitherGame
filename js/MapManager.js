@@ -22,11 +22,11 @@ MapManager.prototype.init = function(size)
 					[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 					[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
 	
-	this.map = [[1,2,0,0,1],
-				[0,1,0,1,0],
-				[0,2,0,0,0],
-				[0,0,2,0,0],
-				[0,0,0,1,0]];
+	this.map = [[0,0,0,0,0],
+				[0,0,0,0,0],
+				[0,0,0,0,0],
+				[0,0,0,0,0],
+				[0,0,0,0,0]];
 	
 	this.building[0] = 	[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 						[0, 1, 1, 1, 1, 1, 1, 1, 0, 0],
@@ -49,9 +49,30 @@ MapManager.prototype.init = function(size)
 						[0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
 						[0, 1, 1, 1, 1, 1, 1, 1, 1, 0],						
 						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
+						
+	this.building[2] = 	[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						[0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+						[0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
+						[0, 1, 0, 1, 0, 1, 0, 0, 1, 0],
+						[0, 0, 0, 1, 0, 1, 0, 1, 1, 0],
+						[0, 0, 0, 1, 0, 1, 0, 1, 1, 0],
+						[0, 1, 0, 1, 0, 1, 0, 0, 1, 0],
+						[0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
+						[0, 1, 1, 1, 1, 1, 1, 1, 1, 0],						
+						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
 					
 }
-
+MapManager.prototype.GenerateMap = function()
+{
+	//Randomly place buildings on the map every time the game loads.
+	for(var i = 0; i < this.map.length; i++)
+	{
+		for(var j = 0; j < this.map[i].length; j++)
+		{
+			this.map[j][i] = Math.floor(Math.random()*(this.building.length-1) + 1);
+		}
+	}
+}
 MapManager.prototype.Draw = function(offsetX, offsetY)
 {
 	//Calls the draw function for the buildings with the required position based off of the map array

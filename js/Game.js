@@ -21,6 +21,7 @@ function Game()
 Game.prototype.initGame = function()
 {
 	maps.init(200);
+	maps.GenerateMap();
 	this.cam.init(10000, 10000, canvas.width, canvas.height);
 }
 Game.prototype.initCanvas = function()
