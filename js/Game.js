@@ -22,8 +22,9 @@ Game.prototype.initGame = function()
 {
 	maps.init(200);
 	maps.GenerateMap();
-	this.player.Load();
+	this.player.Load(canvas.width * 2, canvas.width * 2);
 	this.cam.init(10000, 10000, canvas.width, canvas.height);
+	
 }
 Game.prototype.initCanvas = function()
 {//Set up the Canvas to draw game elements on
@@ -32,11 +33,12 @@ Game.prototype.initCanvas = function()
 	canvasCtx = canvas.getContext('2d');
 	document.body.appendChild(canvas);
 	//Set canvas size
-	canvas.width = window.innerWidth - 20;
-	canvas.height = window.innerHeight - 20;
+	canvas.width = window.innerWidth ;
+	canvas.height = window.innerHeight ;
 	//Add a listener for key presses and releases
 	canvas.addEventListener("keydown", onKeyPress, true);
 	canvas.addEventListener("keyup", onKeyUp, true);
+	document.addEventListener("resize", onResize, true);
 	//Set tab index to 0 and set focus on canvas
 	canvas.setAttribute('tabindex', '0');
 	canvas.focus();
@@ -45,6 +47,12 @@ Game.prototype.initMaps = function()
 {
 	//Set up the map manager 
 	maps = new MapManager();
+}
+function onResize(e)
+{
+	//Set canvas size
+	canvas.width = window.innerWidth - 20;
+	canvas.height = window.innerHeight - 20;
 }
 function onKeyPress(e)
 {//Places user input into the keys map
@@ -96,8 +104,8 @@ Game.prototype.Draw = function()
 	canvasCtx.fillStyle = "grey";
 	canvasCtx.fillRect(0, 0, canvas.width, canvas.height);	
 	
-	//Call player draw method
-	this.player.Draw(this.cam.getX(), this.cam.getY());
 	//Call map draw method
 	maps.Draw(this.cam.getX(), this.cam.getY());
+	//Call player draw method
+	this.player.Draw(this.cam.getX(), this.cam.getY(), canvas.width, canvas.height);
 }

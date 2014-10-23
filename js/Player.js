@@ -1,4 +1,4 @@
-function Player(x, y, radius)
+function Player(x, y, radius, screenWidth, screenHeight)
 {
 	//Set up player position and radius parameters
 	this.position = new Vector2(x, y);
@@ -8,6 +8,7 @@ function Player(x, y, radius)
 	this.dir = 0;
 	//Player sprite
 	this.image = new Sprite(radius * 2, radius * 2);
+	
 }
 
 
@@ -74,11 +75,13 @@ Player.prototype.turnRight = function()
 	this.dir+= 0.05;
 }
 
-Player.prototype.Load = function()
+Player.prototype.Load = function(screenWidth, screenHeight)
 {
 	this.image.load("images/player.png");
+	this.flashlight = new Sprite(screenWidth, screenHeight);
+	this.flashlight.load("images/flashlight.png");
 }
-Player.prototype.Draw = function(offsetX, offsetY)
+Player.prototype.Draw = function(offsetX, offsetY, screenWidth, screenHeight)
 {
 	canvasCtx.fillStyle = rgb(0, 200, 0);
 	//draw a circle
@@ -86,5 +89,6 @@ Player.prototype.Draw = function(offsetX, offsetY)
 	canvasCtx.arc(this.position.x - offsetX, this.position.y - offsetY, this.radius, 0, Math.PI*2); 
 	canvasCtx.closePath();
 	canvasCtx.fill();
-	this.image.rotateDraw(new Vector2(((this.position.x - this.radius) - offsetX), ((this.position.y - this.radius) - offsetY)), this.radius, this.dir);
+	this.image.rotateDraw(new Vector2(((this.position.x - this.radius) - offsetX), ((this.position.y - this.radius) - offsetY)), this.radius, this.radius, this.dir);
+	this.flashlight.rotateDraw(new Vector2(((this.position.x - this.flashlight.width/2) - offsetX), ((this.position.y - this.flashlight.height/2) - offsetY)), this.flashlight.width/2, this.flashlight.height/2 , this.dir);
 }

@@ -16,13 +16,13 @@ Sprite.prototype.draw = function(position)
 {
 	canvasCtx.drawImage(this.img, position.x, position.y, this.width, this.height);
 }
-Sprite.prototype.rotateDraw = function(position, radius, rotation)
+Sprite.prototype.rotateDraw = function(position, offsetX, offsetY, rotation)
 {
 	//Draw the sprite rotated about its center
 	canvasCtx.save();
-	canvasCtx.translate(position.x + radius, position.y + radius);
+	canvasCtx.translate(position.x + offsetX, position.y + offsetY);
 	canvasCtx.rotate(rotation);
-	canvasCtx.translate(-(position.x + radius), -(position.y + radius));
+	canvasCtx.translate(-(position.x + offsetX), -(position.y + offsetY));
 	this.draw(position);	
 	canvasCtx.restore();
 }
