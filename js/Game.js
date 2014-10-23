@@ -5,8 +5,8 @@ function Game()
 	//Initialise player
 	this.player = new Player(50, 50, 50);
 	
-	//Set up map manager
-	//this.maps = new MapManager();
+	//Initialise enemy
+	this.enemy = new Enemy(600, 50, 80);
 	
 	//Sets up the camera
 	this.cam = new Camera();
@@ -23,6 +23,7 @@ Game.prototype.initGame = function()
 	maps.init(200);
 	maps.GenerateMap();
 	this.player.Load(canvas.width * 2, canvas.width * 2);
+	this.enemy.Load();
 	this.cam.init(10000, 10000, canvas.width, canvas.height);
 	
 }
@@ -94,6 +95,7 @@ Game.prototype.gameLoop = function()
 	//game.maps.WallCollisionY(game.player.getX(), game.player.getY());
 	game.player.walk(game.keys);
 	game.cam.update(game.player.getX(), game.player.getY());
+	game.enemy.Update(game.player.getPos());
 	game.Draw();
 	window.requestAnimFrame(game.gameLoop);
 }
@@ -108,4 +110,6 @@ Game.prototype.Draw = function()
 	maps.Draw(this.cam.getX(), this.cam.getY());
 	//Call player draw method
 	this.player.Draw(this.cam.getX(), this.cam.getY(), canvas.width, canvas.height);
+	//Enemy draw method
+	this.enemy.Draw(this.cam.getX(), this.cam.getY());
 }
