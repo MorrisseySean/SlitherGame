@@ -5,7 +5,9 @@ function Player(x, y, radius)
 	this.radius = radius;
 	//Set up speed and direction parameters
 	this.speed = 5;
-	this.dir = 0;	
+	this.dir = 0;
+	//Player sprite
+	this.image = new Sprite(radius * 2, radius * 2);
 }
 
 
@@ -50,11 +52,7 @@ Player.prototype.walk = function(keys)
 	if(keys["up"] == true)
 	{
 		velocity = new Vector2(this.speed * Math.cos(this.dir), this.speed * Math.sin(this.dir));
-		//velocityX = this.speed * Math.cos(this.dir);
-		//velocityY = this.speed * Math.sin(this.dir);
 		this.position = maps.WallCollision(this.position, velocity, this.radius);
-		//this.position.x += velocity.x;
-		//this.position.y += velocity.y;		
 	}
 	if (keys["right"] == true)
 	{
@@ -76,6 +74,10 @@ Player.prototype.turnRight = function()
 	this.dir+= 0.05;
 }
 
+Player.prototype.Load = function()
+{
+	this.image.load("images/player.png");
+}
 Player.prototype.Draw = function(offsetX, offsetY)
 {
 	canvasCtx.fillStyle = rgb(0, 200, 0);
@@ -84,4 +86,5 @@ Player.prototype.Draw = function(offsetX, offsetY)
 	canvasCtx.arc(this.position.x - offsetX, this.position.y - offsetY, this.radius, 0, Math.PI*2); 
 	canvasCtx.closePath();
 	canvasCtx.fill();
+	this.image.rotateDraw(new Vector2(((this.position.x - this.radius) - offsetX), ((this.position.y - this.radius) - offsetY)), this.radius, this.dir);
 }
