@@ -12,6 +12,10 @@ Enemy.prototype.Load = function()
 	this.image.load("images/monster.png");
 }
 
+Enemy.prototype.getPos = function()
+{
+	return this.position;
+}
 Enemy.prototype.Update = function(playerPos)
 {
 	dx = playerPos.x - this.position.x;

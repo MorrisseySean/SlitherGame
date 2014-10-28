@@ -100,7 +100,7 @@ function onKeyPress(e)
 	}
 	else if(e.keyCode == 65 || e.keyCode == 37)
 	{
-		game.keys["left"] = true;		
+		game.keys["left"] = true;
 	}		
 	else if(e.keyCode == 68||e.keyCode == 39)
 	{
@@ -140,6 +140,7 @@ Game.prototype.gameLoop = function()
 		game.player.walk(game.keys);
 		game.cam.update(game.player.getX(), game.player.getY());
 		game.enemy.Update(game.player.getPos());
+		game.audio.Update(game.player.getPos(), game.enemy.getPos(), game.sounds.gameLoop);
 		game.Draw();		
 	}
 	window.requestAnimFrame(game.gameLoop);
