@@ -16,11 +16,24 @@ function Game()
 	this.keys["up"] = false;
 	this.keys["right"] = false;
 	this.keys["left"] = false;
+	
+	//Sound data and parameters to be used for each sound.
+	this.audio;
+	this.sounds = {
+		gameLoop : 
+		{
+			src : "sounds/creep.mp3",
+			volume : 1.0,
+			loop : true,
+			playing : false
+		}
+	}
+	
 }
 Game.prototype.init = function()
 {
-	this.initCanvas();
 	this.initAudio();
+	this.initCanvas();	
 	this.initMaps();
 	this.initGame();
 }
@@ -29,11 +42,11 @@ Game.prototype.initGame = function()
 	maps.init(200);
 	maps.GenerateMap();
 	this.player.Load(canvas.width * 2, canvas.width * 2);
-	this.enemy.Load();
-	this.audio.Load();
-	this.cam.init(10000, 10000, canvas.width, canvas.height);
+	this.enemy.Load();	
+	this.cam.init(10000, 10000, canvas.width, canvas.height);	
 	
 }
+
 Game.prototype.initCanvas = function()
 {//Set up the Canvas to draw game elements on
 	//Create canvas and attach it to the file.
@@ -63,12 +76,15 @@ Game.prototype.initAudio = function()
 		alert('Web Audio API is not supported in this browser');
 	}
 	this.audio = new AudioManager();
+	this.audio.Load(this.sounds.gameLoop)
 }
 
 Game.prototype.initMaps = function()
 {
 	//Set up the map manager 
 	maps = new MapManager();
+	
+	
 }
 function onResize(e)
 {
@@ -84,12 +100,13 @@ function onKeyPress(e)
 	}
 	else if(e.keyCode == 65 || e.keyCode == 37)
 	{
-		game.keys["left"] = true;
+		game.keys["left"] = true;		
 	}		
 	else if(e.keyCode == 68||e.keyCode == 39)
 	{
-		game.keys["right"] = true;	
+		game.keys["right"] = true;
 	}
+	
 }
 
 function onKeyUp(e)
@@ -102,22 +119,29 @@ function onKeyUp(e)
 	else if(e.keyCode == 65 || e.keyCode == 37)
 	{
 		game.keys["left"] = false;
+		
 	}
 		
 	else if(e.keyCode == 68||e.keyCode == 39)
 	{
-		game.keys["right"] = false;	
+		game.keys["right"] = false;
+		
 	}
 }
 
 Game.prototype.gameLoop = function()
 {//Deals with all runtime events during gameplay
-	//game.maps.WallCollisionX(game.player.getPos());
-	//game.maps.WallCollisionY(game.player.getX(), game.player.getY());
-	game.player.walk(game.keys);
-	game.cam.update(game.player.getX(), game.player.getY());
-	game.enemy.Update(game.player.getPos());
-	game.Draw();
+	if(game.audio.isLoaded() == true)
+	{
+		if(game.sounds.gameLoop.playing == false)
+		{
+			playSound(game.sounds.gameLoop);
+		}
+		game.player.walk(game.keys);
+		game.cam.update(game.player.getX(), game.player.getY());
+		game.enemy.Update(game.player.getPos());
+		game.Draw();		
+	}
 	window.requestAnimFrame(game.gameLoop);
 }
 
@@ -125,7 +149,7 @@ Game.prototype.Draw = function()
 {//Draw game elements to the screen
 	//Clear canvas
 	canvasCtx.fillStyle = "grey";
-	canvasCtx.fillRect(0, 0, canvas.width, canvas.height);	
+	canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
 	
 	//Call map draw method
 	maps.Draw(this.cam.getX(), this.cam.getY());
