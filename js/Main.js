@@ -11,11 +11,11 @@ function main()
 
 function LoadAssets()
 {
-	GAMESIZE = 50;	
+	IMAGE.GAMESIZE = 50;	
 	
-	IMAGE.PLAYERSPRITE = new Sprite(GAMESIZE * 2, GAMESIZE * 2, "images/player.png");
-	IMAGE.ENEMYSPRITE = new Sprite(GAMESIZE * 4, GAMESIZE * 4, "images/monster.png");
+	IMAGE.PLAYERSPRITE = new Sprite(IMAGE.GAMESIZE * 2, IMAGE.GAMESIZE * 2, "images/player.png");
+	IMAGE.ENEMYSPRITE = new Sprite(IMAGE.GAMESIZE * 4, IMAGE.GAMESIZE * 4, "images/monster.png");
 	IMAGE.FLASHLIGHTSPRITE = new Sprite(window.innerWidth * 2, window.innerHeight * 4, "images/flashlight.png");
-	IMAGE.BATTERYSPRITE = new Sprite(GAMESIZE, GAMESIZE, "images/battery.png");
-	IMAGE.PILLSPRITE = new Sprite(GAMESIZE, GAMESIZE, "images/pills.png")
+	IMAGE.BATTERYSPRITE = new Sprite(IMAGE.GAMESIZE * 2, IMAGE.GAMESIZE * 2, "images/battery.png");
+	IMAGE.PILLSPRITE = new Sprite(IMAGE.GAMESIZE * 2, IMAGE.GAMESIZE * 2, "images/pills.png")
 }

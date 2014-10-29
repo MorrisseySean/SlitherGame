@@ -54,7 +54,7 @@ Player.prototype.walk = function(keys)
 	if(keys["up"] == true)
 	{
 		velocity = new Vector2(this.speed * Math.cos(this.dir), this.speed * Math.sin(this.dir));
-		this.position = maps.WallCollision(this.position, velocity, this.radius);
+		/*this.position = maps.WallCollision(this.position, velocity, this.radius);*/
 	}
 	if (keys["right"] == true)
 	{
@@ -90,5 +90,5 @@ Player.prototype.Draw = function(offsetX, offsetY, screenWidth, screenHeight)
 	canvasCtx.closePath();
 	canvasCtx.fill();
 	this.image.rotateDraw(new Vector2(((this.position.x - this.radius) - offsetX), ((this.position.y - this.radius) - offsetY)), this.radius, this.radius, this.dir);
-	this.flashlight.rotateDraw(new Vector2(((this.position.x - this.flashlight.width/2) - offsetX), ((this.position.y - this.flashlight.height/2) - offsetY)), this.flashlight.width/2, this.flashlight.height/2 , this.dir);
+	//this.flashlight.rotateDraw(new Vector2(((this.position.x - this.flashlight.width/2) - offsetX), ((this.position.y - this.flashlight.height/2) - offsetY)), this.flashlight.width/2, this.flashlight.height/2 , this.dir);
 }

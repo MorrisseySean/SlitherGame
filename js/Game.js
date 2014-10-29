@@ -33,7 +33,6 @@ function Game()
 }
 Game.prototype.init = function()
 {
-	this.LoadAssets();
 	this.initAudio();
 	this.initCanvas();	
 	this.initGame();

@@ -14,6 +14,7 @@ function PickUp(x, y, value, radius)
 	
 }
 
+//Get Methods//
 PickUp.prototype.getPos = function()
 {
 	return this.position;
@@ -22,21 +23,25 @@ PickUp.prototype.getPlaced = function()
 {
 	return this.placed;
 }
+///////////////
+
+//Set Methods//
 PickUp.prototype.setPos = function(x, y)
 {
 	this.position = new Vector2(x, y);
 }
+//////////////
 
 PickUp.prototype.Place = function(x, y)
 {
 	//Method for placing the pickup on the map
-	if(this.placed == false) //Only one of each object is allowed.
+	if(this.placed == false) //Don't move the object once placed
 	{
-		if(Math.floor(Math.random() * 4) == 1)//One in 4 chance of the object being placed in this position
+		if(Math.floor(Math.random() * 20) == 1)//One in 4 chance of the object being placed in this position
 		{
+			//Place the object at desired position and set it to placed.
 			this.position = new Vector2(x, y);
 			this.placed = true;
-			console.log(x, y);
 		}
 	}
 }
