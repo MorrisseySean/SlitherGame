@@ -3,13 +3,12 @@ function Enemy(x, y, radius)
 	this.position = new Vector2(x, y);
 	this.radius = radius;
 	this.speed = 2;
-	this.image = new Sprite(radius * 2, radius * 2);
+	this.image = IMAGE.ENEMYSPRITE;
 	this.dir = 0;
 }
 
 Enemy.prototype.Load = function()
 {
-	this.image.load("images/monster.png");
 }
 
 Enemy.prototype.getPos = function()

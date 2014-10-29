@@ -1,14 +1,20 @@
 var building, emptySquare;
+//<summary>Deals with loading assets, generating map and detecting collisions</summary>//
 
-function MapManager()
+function GameManager()
 {
 	this.size = 0;
 	this.building = [];
 	this.map = [];
 	this.emptySquare = []
+	
+	//Pickups
+	this.pickups = [];
+	this.pickups[this.pickups.length] = this.pills = new PickUp(0, 0, "pills", this.size);
+	this.pickups[this.pickups.length] = this.battery = new PickUp(0, 0, "battery", this.size);
 }
 
-MapManager.prototype.init = function(size)
+GameManager.prototype.init = function(size)
 {
 	this.size = size;
 	emptySquare = 	[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -32,7 +38,7 @@ MapManager.prototype.init = function(size)
 						[0, 1, 1, 1, 1, 1, 1, 1, 0, 0],
 						[0, 1, 0, 0, 0, 0, 0, 1, 0, 0],
 						[0, 1, 0, 0, 0, 0, 0, 1, 0, 0],
-						[0, 0, 0, 1, 0, 1, 0, 1, 0, 0],
+						[0, 0, 0, 1, 5, 1, 0, 1, 0, 0],
 						[0, 0, 0, 1, 1, 1, 0, 1, 0, 0],
 						[0, 1, 0, 1, 1, 1, 0, 1, 0, 0],
 						[0, 1, 0, 0, 0, 0, 0, 1, 0, 0],
@@ -44,8 +50,8 @@ MapManager.prototype.init = function(size)
 						[0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
 						[0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
 						[0, 0, 0, 1, 1, 0, 0, 0, 1, 0],
-						[0, 0, 0, 1, 0, 0, 1, 0, 1, 0],
-						[0, 1, 0, 0, 0, 1, 1, 0, 0, 0],
+						[0, 0, 0, 1, 0, 6, 1, 0, 1, 0],
+						[0, 1, 0, 0, 5, 1, 1, 0, 0, 0],
 						[0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
 						[0, 1, 1, 1, 1, 1, 1, 1, 1, 0],						
 						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
@@ -55,14 +61,15 @@ MapManager.prototype.init = function(size)
 						[0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
 						[0, 1, 0, 1, 0, 1, 0, 0, 1, 0],
 						[0, 0, 0, 1, 0, 1, 0, 1, 1, 0],
-						[0, 0, 0, 1, 0, 1, 0, 1, 1, 0],
+						[0, 0, 0, 1, 6, 1, 0, 1, 1, 0],
 						[0, 1, 0, 1, 0, 1, 0, 0, 1, 0],
 						[0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
 						[0, 1, 1, 1, 1, 1, 1, 1, 1, 0],						
 						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
 					
 }
-MapManager.prototype.GenerateMap = function()
+
+GameManager.prototype.GenerateMap = function()
 {
 	//Randomly place buildings on the map every time the game loads.
 	for(var i = 0; i < this.map.length; i++)
@@ -72,8 +79,10 @@ MapManager.prototype.GenerateMap = function()
 			this.map[j][i] = Math.floor(Math.random()*(this.building.length-1) + 1);
 		}
 	}
+	
 }
-MapManager.prototype.Draw = function(offsetX, offsetY)
+
+GameManager.prototype.Draw = function(offsetX, offsetY)
 {
 	//Calls the draw function for the buildings with the required position based off of the map array
 	for(var i = 0; i < this.map.length; i++)
@@ -86,9 +95,19 @@ MapManager.prototype.Draw = function(offsetX, offsetY)
 			}			
 		}
 	}
+	//Draw pickups
+	for(var k = 0; k < this.pickups.length; k++)
+	{
+		if(this.pickups[k].getPlaced())
+		{
+			this.pickups[k].Draw(offsetX, offsetY);
+		}
+	}
+	//this.battery.Draw(offsetX, offsetY);
+	//this.pills.Draw(offsetX, offsetY);
 }
 
-MapManager.prototype.DrawBuilding = function(buildingNo, posX, posY, offsetX, offsetY)
+GameManager.prototype.DrawBuilding = function(buildingNo, posX, posY, offsetX, offsetY)
 {
 	//Draws individual buildings
 	for(var i = 0; i < this.building[buildingNo].length; i++)
@@ -101,14 +120,18 @@ MapManager.prototype.DrawBuilding = function(buildingNo, posX, posY, offsetX, of
 				canvasCtx.fillRect(posX + (j*this.size - offsetX), posY + (i * this.size - offsetY), this.size, this.size);
 			}
 			else if(this.building[buildingNo][i][j] == 5)
-			{
-				this.battery = new PickUp(posX + (j*this.size - offsetX), posY + (i * this.size - offsetY), "battery", this.size);
+			{				
+				this.battery.Place(posX + (j*this.size), posY + (i * this.size), this.size, this.size);
+			}
+			else if(this.building[buildingNo][i][j] == 6)
+			{				
+				this.pills.Place(posX + (j*this.size), posY + (i * this.size), this.size, this.size);
 			}
 		}
 	}
 }
 
-MapManager.prototype.WallCollision = function(playerPos, playerVel, playerSize)
+GameManager.prototype.WallCollision = function(playerPos, playerVel, playerSize)
 {
 	//Detect collisions between the player and the walls
 	var xPos = 0;
@@ -162,3 +185,44 @@ MapManager.prototype.WallCollision = function(playerPos, playerVel, playerSize)
 	}	
 }
 
+/*GameManager.prototype.placePickups = function()
+{
+	allplaced = false;
+	while(allplaced == false)
+	{
+		numPlaced = 0;
+		for(int i = 0; i < this.pickups.length; i++)
+		{
+			if(this.pickups[i].getPlaced() == false)
+			{
+				for(var j = 0; j < this.map.length; j++)
+				{
+					for(var k = 0; k < this.map.length; k++)
+					{
+						if(this.map[k][j] != 0)
+						{
+							buildingNo = this.map[k][j];
+							buildingSquare = this.building[
+							for(var l = 0; l < this.building[buildingNo].length; l++)
+							{
+								for(var m = 0; m < this.building[buildingNo].length; m++)
+								{
+									if(this.building[buildingNo][m][l] == 5)
+									{
+										this.battery.Place();
+									}
+								}
+							}
+						}						
+					}
+				}
+			}
+			else
+			{
+				numPlaced++;
+			}
+			
+		}
+	}
+}
+*/

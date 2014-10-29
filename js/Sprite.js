@@ -1,14 +1,10 @@
 //A sprite class that allows the loading, drawing and rotating of sprites.
 
-function Sprite(width, height)
+function Sprite(width, height, str)
 {
 	this.img = new Image();
 	this.width = width;
 	this.height = height;
-}
-
-Sprite.prototype.load = function(str)
-{
 	this.img.src = str;
 }
 

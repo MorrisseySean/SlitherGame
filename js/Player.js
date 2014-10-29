@@ -7,7 +7,8 @@ function Player(x, y, radius, screenWidth, screenHeight)
 	this.speed = 5;
 	this.dir = 0;
 	//Player sprite
-	this.image = new Sprite(radius * 2, radius * 2);
+	this.image = IMAGE.PLAYERSPRITE;
+	this.flashlight = IMAGE.FLASHLIGHTSPRITE;
 	
 }
 
@@ -77,9 +78,8 @@ Player.prototype.turnRight = function()
 
 Player.prototype.Load = function(screenWidth, screenHeight)
 {
-	this.image.load("images/player.png");
-	this.flashlight = new Sprite(screenWidth, screenHeight);
-	this.flashlight.load("images/flashlight.png");
+	
+	
 }
 Player.prototype.Draw = function(offsetX, offsetY, screenWidth, screenHeight)
 {

@@ -6,7 +6,7 @@ function Game()
 	this.player = new Player(50, 50, 50);
 	
 	//Initialise enemy
-	this.enemy = new Enemy(600, 50, 80);
+	this.enemy = new Enemy(5000, 5000, 80);
 	
 	//Sets up the camera
 	this.cam = new Camera();
@@ -27,18 +27,20 @@ function Game()
 			loop : true,
 			playing : false
 		}
-	}
+	}	
+	this.GAMESIZE = 50;
 	
 }
 Game.prototype.init = function()
 {
+	this.LoadAssets();
 	this.initAudio();
 	this.initCanvas();	
-	this.initMaps();
 	this.initGame();
 }
 Game.prototype.initGame = function()
 {
+	maps = new GameManager();
 	maps.init(200);
 	maps.GenerateMap();
 	this.player.Load(canvas.width * 2, canvas.width * 2);
@@ -79,13 +81,6 @@ Game.prototype.initAudio = function()
 	this.audio.Load(this.sounds.gameLoop)
 }
 
-Game.prototype.initMaps = function()
-{
-	//Set up the map manager 
-	maps = new MapManager();
-	
-	
-}
 function onResize(e)
 {
 	//Set canvas size
