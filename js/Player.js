@@ -54,7 +54,11 @@ Player.prototype.walk = function(keys)
 	if(keys["up"] == true)
 	{
 		velocity = new Vector2(this.speed * Math.cos(this.dir), this.speed * Math.sin(this.dir));
-		/*this.position = maps.WallCollision(this.position, velocity, this.radius);*/
+		tempPos = new Vector2(this.position.x + velocity.x, this.position.y + velocity.y);
+		if(maps.DetectWallCollision(tempPos, this.radius) == false)
+		{
+			this.position = tempPos;
+		}
 	}
 	if (keys["right"] == true)
 	{

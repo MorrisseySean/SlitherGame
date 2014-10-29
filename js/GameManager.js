@@ -1,11 +1,10 @@
 var building, emptySquare;
-//<summary>Deals with loading assets, generating map and detecting collisions</summary>//
+//Generates and draws the map and deals with collisions</summary>//
 
 function GameManager()
 {
 	this.size = 0;
 	this.building = [];
-	this.walls = [];
 	this.map = [];
 	this.buildArray = [];
 	this.emptySquare = []
@@ -89,10 +88,7 @@ GameManager.prototype.GenerateMap = function()
 		{
 			this.map[j][i].GenerateBuilding();
 		}
-	}
-	
-	
-	
+	}	
 }
 
 GameManager.prototype.Draw = function(offsetX, offsetY)
@@ -118,107 +114,35 @@ GameManager.prototype.Draw = function(offsetX, offsetY)
 	}
 }
 
-GameManager.prototype.DrawBuilding = function(buildingNo, posX, posY, offsetX, offsetY)
-{
-	//Draws individual buildings
-	for(var i = 0; i < this.building[buildingNo].length; i++)
-	{
-		for(var j = 0; j < this.building[buildingNo][0].length; j++)
-		{
-			if(this.building[buildingNo][i][j] == 1)
-			{
-				canvasCtx.fillStyle = rgb(100, 100, 0);
-				canvasCtx.fillRect(posX + (j*this.size - offsetX), posY + (i * this.size - offsetY), this.size, this.size);
-			}
-			//If it is a position the object can be placed, attempt to place it there.
-			else if(this.building[buildingNo][i][j] == 5)
-			{				
-				this.battery.Place(posX + (j*this.size), posY + (i * this.size), this.size, this.size);
-			}
-			else if(this.building[buildingNo][i][j] == 6)
-			{				
-				this.pills.Place(posX + (j*this.size), posY + (i * this.size), this.size, this.size);
-			}
-		}
-	}
-}
-
-GameManager.prototype.GenerateBuilding = function(buildingNo, posX, posY, offsetX, offsetY)
-{
-	//Draws individual buildings
-	for(var i = 0; i < this.building[buildingNo].length; i++)
-	{
-		for(var j = 0; j < this.building[buildingNo][0].length; j++)
-		{
-			if(this.building[buildingNo][i][j] == 1)
-			{
-				canvasCtx.fillStyle = rgb(100, 100, 0);
-				canvasCtx.fillRect(posX + (j*this.size - offsetX), posY + (i * this.size - offsetY), this.size, this.size);
-			}
-			//If it is a position the object can be placed, attempt to place it there.
-			else if(this.building[buildingNo][i][j] == 5)
-			{				
-				this.battery.Place(posX + (j*this.size), posY + (i * this.size), this.size, this.size);
-			}
-			else if(this.building[buildingNo][i][j] == 6)
-			{				
-				this.pills.Place(posX + (j*this.size), posY + (i * this.size), this.size, this.size);
-			}
-		}
-	}
-}
-
-/*GameManager.prototype.WallCollision = function(playerPos, playerVel, playerSize)
+GameManager.prototype.FindMapIndex = function(pos, size)
 {
 	//Detect collisions between the player and the walls
 	var xPos = 0;
 	var yPos = 0;
-	if(playerVel.x > 0)
-	{
-		xPos = Math.floor(((playerPos.x + playerSize) + playerVel.x)/this.size)
-	}
-	else
-	{
-		xPos = Math.floor(((playerPos.x - playerSize) + playerVel.x)/this.size)
-	}
-	if(playerVel.y > 0)
-	{
-		yPos = Math.floor(((playerPos.y + playerSize) + playerVel.y)/this.size)
-	}
-	else
-	{
-		yPos = Math.floor(((playerPos.y - playerSize) + playerVel.y)/this.size)
-	}
-	if(xPos < 0 || xPos > this.size * this.building[0].length * this.map.length||yPos < 0||yPos > this.size * this.building[0].length * this.map.length)
-	{
-		//If the player is at the edge of the screen don't move.
-		return playerPos;
-	}
+	xPos = Math.floor((pos.x + size)/this.size)
+	yPos = Math.floor((pos.y + size)/this.size)
 	
 	//Find which map location the player is in
 	xIndex = Math.floor(xPos/this.building[0].length);	
 	yIndex = Math.floor(yPos/this.building[0].length);
-	
-	//Find which building is located in the same position as the player
-	var buildingNo = this.map[yIndex][xIndex];
-	if(buildingNo < 0)
+	return new Vector2(xIndex, yIndex);	
+}
+
+GameManager.prototype.DetectWallCollision = function(pos, size)
+{
+	mapPos = this.FindMapIndex(pos, size);
+	wallArray = this.map[mapPos.x][mapPos.y].walls;
+	collides = false;
+	for(var i = 0; i < wallArray.length; i++)
 	{
-		return new Vector2(playerPos.x + playerVel.x, playerPos.y + playerVel.y);
+		if(wallArray[i].position.x < pos.x + size &&
+		wallArray[i].position.x + wallArray[i].width > pos.x - size &&
+		wallArray[i].position.y < pos.y + size&&
+		wallArray[i].position.x + wallArray[i].width > pos.y - size)
+		{
+			collides = true;
+		}
 	}
-	else
-	{
-		//Find what position the player is in that building square
-		var buildPosX = xPos - (xIndex * this.building[0].length);
-		var buildPosY = yPos - (yIndex * this.building[0].length);
-		//If the player's moved position would put it inside a building wall, don't move the player
-		if(this.building[buildingNo][buildPosY][buildPosX] == 1)
-		{
-			return playerPos;
-		}
-		else
-		{
-			return new Vector2(playerPos.x + playerVel.x, playerPos.y + playerVel.y);
-		}
-	}	
-}*/
+	return collides;
+}
 
