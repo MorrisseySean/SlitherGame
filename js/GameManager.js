@@ -67,6 +67,17 @@ GameManager.prototype.init = function(size)
 						[0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
 						[0, 1, 1, 1, 1, 1, 1, 1, 1, 0],						
 						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
+						
+	this.building[3] = 	[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						[0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
+						[0, 0, 1, 1, 0, 0, 1, 1, 0, 0],
+						[0, 0, 1, 0, 0, 0, 0, 1, 0, 0],
+						[0, 0, 1, 0, 0, 0, 0, 1, 0, 0],
+						[0, 0, 1, 0, 0, 0, 0, 1, 0, 0],
+						[0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
+						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];					
 					
 }
 
@@ -77,9 +88,17 @@ GameManager.prototype.GenerateMap = function()
 	{
 		for(var j = 0; j < this.map[i].length; j++)
 		{
-			this.map[j][i] = new Building(j * this.size * this.building[0].length, i * this.size * this.building[0].length, this.size, this.building[Math.floor(Math.random() * this.building.length)]);
+			if(j == Math.ceil(this.map.length/2) && i == Math.ceil(this.map[j].length/2)) //Make the central building the starting building
+			{
+				this.map[j][i] = new Building(j * this.size * this.building[0].length, i * this.size * this.building[0].length, this.size, this.building[3]);
+			}
+			else //Place a random building
+			{				
+				this.map[j][i] = new Building(j * this.size * this.building[0].length, i * this.size * this.building[0].length, this.size, this.building[Math.floor(Math.random() * this.building.length)]);
+			}
 		}
 	}
+	
 	
 	//Load the buildings into an array
 	for(var i = 0; i < this.map.length; i++)
@@ -138,7 +157,7 @@ GameManager.prototype.DetectWallCollision = function(pos, size)
 		if(wallArray[i].position.x < pos.x + size &&
 		wallArray[i].position.x + wallArray[i].width > pos.x - size &&
 		wallArray[i].position.y < pos.y + size&&
-		wallArray[i].position.x + wallArray[i].width > pos.y - size)
+		wallArray[i].position.y + wallArray[i].width > pos.y - size)
 		{
 			collides = true;
 		}

@@ -5,6 +5,7 @@ function Enemy(x, y, radius)
 	this.speed = 2;
 	this.image = IMAGE.ENEMYSPRITE;
 	this.dir = 0;
+	this.seen = false;
 }
 
 Enemy.prototype.Load = function()
@@ -15,14 +16,21 @@ Enemy.prototype.getPos = function()
 {
 	return this.position;
 }
+Enemy.prototype.onSight = function(inSight)
+{
+	this.seen = inSight;
+}
 Enemy.prototype.Update = function(playerPos)
 {
-	dx = playerPos.x - this.position.x;
-	dy = playerPos.y - this.position.y;
-	this.dir = Math.atan2(dy, dx);
-	velocity = new Vector2(this.speed * Math.cos(this.dir), this.speed * Math.sin(this.dir));
-	this.position.x += velocity.x;
-	this.position.y += velocity.y;
+	if(this.seen == false)
+	{
+		dx = playerPos.x - this.position.x;
+		dy = playerPos.y - this.position.y;
+		this.dir = Math.atan2(dy, dx);
+		velocity = new Vector2(this.speed * Math.cos(this.dir), this.speed * Math.sin(this.dir));
+		this.position.x += velocity.x;
+		this.position.y += velocity.y;
+	}
 }
 
 Enemy.prototype.Draw = function(offsetX, offsetY)

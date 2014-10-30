@@ -6,7 +6,7 @@ function Game()
 	this.player = new Player(50, 50, 50);
 	
 	//Initialise enemy
-	this.enemy = new Enemy(5000, 5000, 80);
+	this.enemy = new Enemy(5000, 50, 80);
 	
 	//Sets up the camera
 	this.cam = new Camera();
@@ -42,7 +42,6 @@ Game.prototype.initGame = function()
 	maps = new GameManager();
 	maps.init(200);
 	maps.GenerateMap();
-	this.player.Load(canvas.width * 2, canvas.width * 2);
 	this.enemy.Load();	
 	this.cam.init(10000, 10000, canvas.width, canvas.height);	
 	
@@ -131,6 +130,7 @@ Game.prototype.gameLoop = function()
 		{
 			playSound(game.sounds.gameLoop);
 		}
+		game.player.flashCheck(game.enemy);
 		game.player.walk(game.keys);
 		game.cam.update(game.player.getX(), game.player.getY());
 		game.enemy.Update(game.player.getPos());

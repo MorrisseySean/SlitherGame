@@ -6,6 +6,8 @@ function Player(x, y, radius, screenWidth, screenHeight)
 	//Set up speed and direction parameters
 	this.speed = 5;
 	this.dir = 0;
+	//Parameter for sanity
+	this.sanity = 100;
 	//Player sprite
 	this.image = IMAGE.PLAYERSPRITE;
 	this.flashlight = IMAGE.FLASHLIGHTSPRITE;
@@ -55,6 +57,14 @@ Player.prototype.walk = function(keys)
 	{
 		velocity = new Vector2(this.speed * Math.cos(this.dir), this.speed * Math.sin(this.dir));
 		tempPos = new Vector2(this.position.x + velocity.x, this.position.y + velocity.y);
+		if(tempPos.x - this.radius  < 0)
+		{
+			tempPos.x = this.position.x;
+		}
+		if(tempPos.y - this.radius  < 0)
+		{
+			tempPos.y = this.position.y;
+		}
 		if(maps.DetectWallCollision(tempPos, this.radius) == false)
 		{
 			this.position = tempPos;
@@ -73,17 +83,47 @@ Player.prototype.walk = function(keys)
 //Methods to rotate player left or right
 Player.prototype.turnLeft = function()
 {
-	this.dir-= 0.05;
+	this.dir *= (180/Math.PI);
+	this.dir -= 1;
+	if(this.dir < 0)
+	{
+		this.dir += 360;
+	}
+	this.dir *= (Math.PI/180);
 }
 Player.prototype.turnRight = function()
 {
-	this.dir+= 0.05;
+	this.dir *= (180/Math.PI);
+	this.dir += 1;
+	this.dir %= 360;
+	this.dir *= (Math.PI/180);
 }
 
-Player.prototype.Load = function(screenWidth, screenHeight)
+//Flashlight enemy detection
+Player.prototype.flashCheck = function(enemy)
 {
-	
-	
+	//Width and height of flashlight collision box
+	var rHeight = this.radius * 3;
+	var rWidth = this.radius * 7;
+	//Rotate enemy position about player
+	var tempEnemyPos = new Vector2(enemy.position.x - this.position.x, enemy.position.y - this.position.y);
+	var rotateAng = -this.dir;	
+	var x = tempEnemyPos.x * (Math.cos(rotateAng)) - tempEnemyPos.y * (Math.sin(rotateAng));
+	var y = tempEnemyPos.x * (Math.sin(rotateAng)) + tempEnemyPos.y * (Math.cos(rotateAng));;
+	//Check if the enemy is inside the flashlight
+	if(-this.radius/2 < x &&	rWidth > x && -rHeight < y && rHeight > y)
+	{
+		//Stop the enemy and reduce sanity.
+		enemy.onSight(true);
+		if(this.sanity > 0)
+		{
+			this.sanity -= 0.1;
+		}
+	}
+	else
+	{
+		enemy.onSight(false);
+	}
 }
 Player.prototype.Draw = function(offsetX, offsetY, screenWidth, screenHeight)
 {
@@ -94,5 +134,5 @@ Player.prototype.Draw = function(offsetX, offsetY, screenWidth, screenHeight)
 	canvasCtx.closePath();
 	canvasCtx.fill();
 	this.image.rotateDraw(new Vector2(((this.position.x - this.radius) - offsetX), ((this.position.y - this.radius) - offsetY)), this.radius, this.radius, this.dir);
-	//this.flashlight.rotateDraw(new Vector2(((this.position.x - this.flashlight.width/2) - offsetX), ((this.position.y - this.flashlight.height/2) - offsetY)), this.flashlight.width/2, this.flashlight.height/2 , this.dir);
+	this.flashlight.rotateDraw(new Vector2(((this.position.x - this.flashlight.width/2) - offsetX), ((this.position.y - this.flashlight.height/2) - offsetY)), (this.flashlight.width/2), this.flashlight.height/2 , this.dir);
 }
