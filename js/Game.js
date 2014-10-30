@@ -130,6 +130,7 @@ Game.prototype.gameLoop = function()
 		{
 			playSound(game.sounds.gameLoop);
 		}
+		maps.PickUpItems(game.player.position, game.player.radius);
 		game.player.flashCheck(game.enemy);
 		game.player.walk(game.keys);
 		game.cam.update(game.player.getX(), game.player.getY());

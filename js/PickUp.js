@@ -3,6 +3,7 @@ function PickUp(x, y, value, radius)
 	this.position = new Vector2(x, y);
 	this.value = value;
 	this.placed = false;
+	this.pickedUp = false;
 	if(this.value == "battery")
 	{
 		this.image = IMAGE.BATTERYSPRITE;
@@ -37,7 +38,7 @@ PickUp.prototype.Place = function(x, y)
 	//Method for placing the pickup on the map
 	if(this.placed == false) //Don't move the object once placed
 	{
-		if(Math.floor(Math.random() * 20) == 1)//One in 4 chance of the object being placed in this position
+		if(Math.floor(Math.random() * 20) > 1)//One in 4 chance of the object being placed in this position
 		{
 			//Place the object at desired position and set it to placed.
 			this.position = new Vector2(x, y);
@@ -48,5 +49,8 @@ PickUp.prototype.Place = function(x, y)
 
 PickUp.prototype.Draw = function(offsetX, offsetY)
 {
-	this.image.draw(new Vector2(this.position.x - offsetX, this.position.y - offsetY));
+	if(this.pickedUp != true)
+	{
+		this.image.draw(new Vector2(this.position.x - offsetX, this.position.y - offsetY));
+	}
 }

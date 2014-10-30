@@ -117,7 +117,7 @@ Player.prototype.flashCheck = function(enemy)
 		enemy.onSight(true);
 		if(this.sanity > 0)
 		{
-			this.sanity -= 0.1;
+			this.sanity -= 0.1;			
 		}
 	}
 	else

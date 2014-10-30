@@ -52,7 +52,7 @@ GameManager.prototype.init = function(size)
 						[0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
 						[0, 0, 0, 1, 1, 0, 0, 0, 1, 0],
 						[0, 0, 0, 1, 0, 6, 1, 0, 1, 0],
-						[0, 1, 0, 0, 5, 1, 1, 0, 0, 0],
+						[0, 1, 0, 0, 0, 1, 1, 0, 0, 0],
 						[0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
 						[0, 1, 1, 1, 1, 1, 1, 1, 1, 0],						
 						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
@@ -117,7 +117,6 @@ GameManager.prototype.Draw = function(offsetX, offsetY)
 	{
 		for(var j = 0; j < this.map.length; j++)
 		{
-				//this.DrawBuilding(this.map[i][j], j * this.size * this.building[0].length, i * this.size * this.building[0].length, offsetX, offsetY);	
 				this.map[i][j].Draw(offsetX, offsetY);
 				this.map[j][i].GeneratePickUps(this.pickups);
 		}
@@ -135,13 +134,11 @@ GameManager.prototype.Draw = function(offsetX, offsetY)
 
 GameManager.prototype.FindMapIndex = function(pos, size)
 {
-	//Detect collisions between the player and the walls
+	//Find the index of an item on the map
 	var xPos = 0;
 	var yPos = 0;
 	xPos = Math.floor((pos.x + size)/this.size)
-	yPos = Math.floor((pos.y + size)/this.size)
-	
-	//Find which map location the player is in
+	yPos = Math.floor((pos.y + size)/this.size)	
 	xIndex = Math.floor(xPos/this.building[0].length);	
 	yIndex = Math.floor(yPos/this.building[0].length);
 	return new Vector2(xIndex, yIndex);	
@@ -149,6 +146,7 @@ GameManager.prototype.FindMapIndex = function(pos, size)
 
 GameManager.prototype.DetectWallCollision = function(pos, size)
 {
+	//For each wall in the current building square, check if the player collides with the wall.
 	mapPos = this.FindMapIndex(pos, size);
 	wallArray = this.map[mapPos.x][mapPos.y].walls;
 	collides = false;
@@ -163,5 +161,18 @@ GameManager.prototype.DetectWallCollision = function(pos, size)
 		}
 	}
 	return collides;
+}
+
+GameManager.prototype.PickUpItems = function(pos, size)
+{
+	for(var i = 0; i < this.pickups.length; i++)
+	{
+		dx = pos.x - this.pickups[i].position.x;
+		dy = pos.y - this.pickups[i].position.y;		
+		if(((dx * dx) + (dy * dy)) < (size + this.size) * (size + this.size))
+		{
+			this.pickups[i].pickedUp = true;
+		}
+	}
 }
 
