@@ -1,16 +1,18 @@
 function PickUp(x, y, value, radius)
 {
 	this.position = new Vector2(x, y);
-	this.value = value;
 	this.placed = false;
 	this.pickedUp = false;
-	if(this.value == "battery")
+	this.size = radius;
+	if(value == "battery")
 	{
 		this.image = IMAGE.BATTERYSPRITE;
+		this.value = 0;
 	}
-	else if(this.value == "pills")
+	else if(value == "pills")
 	{
-		this.image = IMAGE.PILLSPRITE;
+		this.image = IMAGE.PILLSPRITE;		
+		this.value = 1;
 	}
 	
 }
@@ -51,6 +53,13 @@ PickUp.prototype.Draw = function(offsetX, offsetY)
 {
 	if(this.pickedUp != true)
 	{
-		this.image.draw(new Vector2(this.position.x - offsetX, this.position.y - offsetY));
+		this.image.draw(new Vector2((this.position.x + this.size/2) - offsetX, (this.position.y + this.size/2) - offsetY));
+	}
+}
+PickUp.prototype.PickUpDraw = function()
+{
+	if(this.pickedUp == true)
+	{
+		this.image.draw(new Vector2(this.size * this.value, 10));
 	}
 }

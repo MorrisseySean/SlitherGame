@@ -8,16 +8,18 @@ function GameManager()
 	this.map = [];
 	this.buildArray = [];
 	this.emptySquare = []
-	
-	//Pickups
-	this.pickups = [];
-	this.pickups[this.pickups.length] = this.pills = new PickUp(0, 0, "pills", this.size);
-	this.pickups[this.pickups.length] = this.battery = new PickUp(0, 0, "battery", this.size);
+	this.pickups = [];	
 }
 
 GameManager.prototype.init = function(size)
 {
 	this.size = size;
+	
+	//Pickups
+	this.pickups[this.pickups.length] = this.pills = new PickUp(0, 0, "pills", this.size/2);
+	this.pickups[this.pickups.length] = this.battery = new PickUp(0, 0, "battery", this.size/2);
+	
+	//Map squares
 	emptySquare = 	[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 					[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 					[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -125,12 +127,27 @@ GameManager.prototype.Draw = function(offsetX, offsetY)
 	//Draw pickups if they are placed on the map
 	for(var k = 0; k < this.pickups.length; k++)
 	{
-		if(this.pickups[k].getPlaced())
+		if(this.pickups[k].getPlaced() && this.pickups[k].pickedUp == false)
 		{
 			this.pickups[k].Draw(offsetX, offsetY);
 		}
 	}
 }
+
+GameManager.prototype.DrawHUD = function(sanity)
+{
+	for(var k = 0; k < this.pickups.length; k++)
+	{
+		if(this.pickups[k].getPlaced() && this.pickups[k].pickedUp == true)
+		{
+			this.pickups[k].PickUpDraw();
+		}
+	}
+	//Draw sanity bar
+	canvasCtx.fillStyle = rgb(100, 0, 100);
+	canvasCtx.fillRect(1200, 10, 300 * sanity/100, 20);
+}
+
 
 GameManager.prototype.FindMapIndex = function(pos, size)
 {
@@ -165,13 +182,18 @@ GameManager.prototype.DetectWallCollision = function(pos, size)
 
 GameManager.prototype.PickUpItems = function(pos, size)
 {
+	//Collision detection for a player and an item
 	for(var i = 0; i < this.pickups.length; i++)
 	{
-		dx = pos.x - this.pickups[i].position.x;
-		dy = pos.y - this.pickups[i].position.y;		
-		if(((dx * dx) + (dy * dy)) < (size + this.size) * (size + this.size))
+		if(this.pickups[i].getPlaced() == true)
 		{
-			this.pickups[i].pickedUp = true;
+			dx = pos.x - (this.pickups[i].getPos().x + this.pickups[i].size/2);
+			dy = pos.y - (this.pickups[i].getPos().y + this.pickups[i].size/2);		
+			if(Math.sqrt((dx * dx) + (dy * dy)) < (size/3 + this.size/3))
+			{
+				//If the two collide, set the pickup to be picked up.
+				this.pickups[i].pickedUp = true;
+			}
 		}
 	}
 }

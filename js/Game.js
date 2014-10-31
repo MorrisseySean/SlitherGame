@@ -40,7 +40,7 @@ Game.prototype.init = function()
 Game.prototype.initGame = function()
 {
 	maps = new GameManager();
-	maps.init(200);
+	maps.init(IMAGE.GAMESIZE * 2);
 	maps.GenerateMap();
 	this.enemy.Load();	
 	this.cam.init(10000, 10000, canvas.width, canvas.height);	
@@ -153,4 +153,6 @@ Game.prototype.Draw = function()
 	this.player.Draw(this.cam.getX(), this.cam.getY(), canvas.width, canvas.height);
 	//Enemy draw method
 	this.enemy.Draw(this.cam.getX(), this.cam.getY());
+	//Call the map hud draw method
+	maps.DrawHUD(this.player.sanity);
 }
