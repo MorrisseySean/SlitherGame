@@ -5,7 +5,7 @@ function Player(x, y, radius, screenWidth, screenHeight)
 	this.radius = radius;
 	//Set up speed and direction parameters
 	this.speed = 5;
-	this.dir = 0;
+	this.dir = 270 * Math.PI/180;
 	//Parameter for sanity
 	this.sanity = 100;
 	//Player sprite

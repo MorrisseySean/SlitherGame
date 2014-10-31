@@ -72,18 +72,18 @@ GameManager.prototype.init = function(size)
 						
 	this.building[3] = 	[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-						[0, 0, 0, 1, 0, 0, 1, 0, 0, 0],
+						[0, 0, 1, 1, 0, 0, 1, 1, 0, 0],
 						[0, 0, 1, 1, 0, 0, 1, 1, 0, 0],
 						[0, 0, 1, 0, 0, 0, 0, 1, 0, 0],
 						[0, 0, 1, 0, 0, 0, 0, 1, 0, 0],
-						[0, 0, 1, 0, 0, 0, 0, 1, 0, 0],
+						[0, 0, 1, 1, 0, 0, 1, 1, 0, 0],
 						[0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
 						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];					
 					
 }
 
-GameManager.prototype.GenerateMap = function()
+GameManager.prototype.GenerateMap = function(player)
 {
 	//Randomly place buildings on the map every time the game loads.
 	for(var i = 0; i < this.map.length; i++)
@@ -93,10 +93,11 @@ GameManager.prototype.GenerateMap = function()
 			if(j == Math.ceil(this.map.length/2) && i == Math.ceil(this.map[j].length/2)) //Make the central building the starting building
 			{
 				this.map[j][i] = new Building(j * this.size * this.building[0].length, i * this.size * this.building[0].length, this.size, this.building[3]);
+				player.setPos((j * this.size * this.building[0].length) + (this.size * (this.building[0].length/2)), i * this.size * this.building[0].length + (this.size * (this.building[0].length/2)));
 			}
 			else //Place a random building
 			{				
-				this.map[j][i] = new Building(j * this.size * this.building[0].length, i * this.size * this.building[0].length, this.size, this.building[Math.floor(Math.random() * this.building.length)]);
+				this.map[j][i] = new Building(j * this.size * this.building[0].length, i * this.size * this.building[0].length, this.size, this.building[Math.floor(Math.random() * (this.building.length - 1))]);
 			}
 		}
 	}

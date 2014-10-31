@@ -3,7 +3,7 @@ var canvasCtx, audioCtx, maps;
 function Game()
 {
 	//Initialise player
-	this.player = new Player(50, 50, 50);
+	this.player = new Player(0,0, 50);
 	
 	//Initialise enemy
 	this.enemy = new Enemy(5000, 50, 80);
@@ -41,7 +41,7 @@ Game.prototype.initGame = function()
 {
 	maps = new GameManager();
 	maps.init(IMAGE.GAMESIZE * 2);
-	maps.GenerateMap();
+	maps.GenerateMap(this.player);
 	this.enemy.Load();	
 	this.cam.init(10000, 10000, canvas.width, canvas.height);	
 	
