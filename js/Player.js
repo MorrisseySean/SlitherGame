@@ -51,11 +51,30 @@ Player.prototype.setSpeed = function(spd)
 }
 /////////////////////////////////////////////////////////////
 
+
+////////////////////Movememnt Methods////////////////////////
 Player.prototype.walk = function(keys)
 {//Update player position based on speed and direction
 	if(keys["up"] == true)
 	{
 		velocity = new Vector2(this.speed * Math.cos(this.dir), this.speed * Math.sin(this.dir));
+		tempPos = new Vector2(this.position.x + velocity.x, this.position.y + velocity.y);
+		if(tempPos.x - this.radius  < 0)
+		{
+			tempPos.x = this.position.x;
+		}
+		if(tempPos.y - this.radius  < 0)
+		{
+			tempPos.y = this.position.y;
+		}
+		if(maps.DetectWallCollision(tempPos, this.radius) == false)
+		{
+			this.position = tempPos;
+		}
+	}
+	else if(keys["back"] == true)
+	{
+		velocity = new Vector2(-(this.speed * Math.cos(this.dir)), -(this.speed * Math.sin(this.dir)));
 		tempPos = new Vector2(this.position.x + velocity.x, this.position.y + velocity.y);
 		if(tempPos.x - this.radius  < 0)
 		{
@@ -98,6 +117,8 @@ Player.prototype.turnRight = function()
 	this.dir %= 360;
 	this.dir *= (Math.PI/180);
 }
+/////////////////////////////////////////////////////////////
+
 
 //Flashlight enemy detection
 Player.prototype.flashCheck = function(enemy)
@@ -125,6 +146,16 @@ Player.prototype.flashCheck = function(enemy)
 		enemy.onSight(false);
 	}
 }
+
+Player.prototype.CheckLoss = function()
+{
+	if(this.sanity <= 0)
+	{
+		return true;
+	}
+	return false;
+}
+
 Player.prototype.Draw = function(offsetX, offsetY, screenWidth, screenHeight)
 {
 	canvasCtx.fillStyle = rgb(0, 200, 0);

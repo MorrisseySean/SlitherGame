@@ -103,6 +103,10 @@ function onKeyPress(e)
 	{
 		game.keys["right"] = true;
 	}
+	else if(e.keyCode == 83||e.keyCode == 40)
+	{
+		game.keys["back"] = true;
+	}
 	//Pause and Unpause game.
 	else if(e.keyCode == 27)
 	{
@@ -135,6 +139,10 @@ function onKeyUp(e)
 		game.keys["right"] = false;
 		
 	}
+	else if(e.keyCode == 83||e.keyCode == 40)
+	{
+		game.keys["back"] = false;
+	}
 }
 
 Game.prototype.gameLoop = function()
@@ -145,16 +153,24 @@ Game.prototype.gameLoop = function()
 		{
 			playSound(game.sounds.gameLoop);
 		}
-		if(game.gameState == game.states.Playing) //If the game isn't paused
+		if(game.gameState == game.states.Playing) //If the game is running and unpaused
 		{
+			if(maps.CheckWin())
+			{
+				game.gameState = game.states.Win;
+			}
+			else if(game.player.CheckLoss())
+			{
+				game.gameState = game.states.Loss;
+			}
 			maps.PickUpItems(game.player.position, game.player.radius);
 			game.player.flashCheck(game.enemy);
 			game.player.walk(game.keys);
 			game.cam.update(game.player.getX(), game.player.getY());
-			game.enemy.Update(game.player.getPos());
-			game.audio.Update(game.player.getPos(), game.enemy.getPos(), game.sounds.gameLoop);
-			game.Draw();
-		}		
+			game.enemy.Update(game.player.getPos(), game.player.getDir(), game.keys);
+			game.audio.Update(game.player.getPos(), game.enemy.getPos(), game.sounds.gameLoop);			
+		}
+		game.Draw();		
 	}
 	window.requestAnimFrame(game.gameLoop);
 }
@@ -164,13 +180,39 @@ Game.prototype.Draw = function()
 	//Clear canvas
 	canvasCtx.fillStyle = "grey";
 	canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
-	
-	//Call map draw method
-	maps.Draw(this.cam.getX(), this.cam.getY());
-	//Call player draw method
-	this.player.Draw(this.cam.getX(), this.cam.getY(), canvas.width, canvas.height);
-	//Enemy draw method
-	this.enemy.Draw(this.cam.getX(), this.cam.getY());
-	//Call the map hud draw method
-	maps.DrawHUD(this.player.sanity);
+	if(game.gameState == game.states.Playing)
+	{
+		//Call map draw method
+		maps.Draw(this.cam.getX(), this.cam.getY());
+		//Call player draw method
+		this.player.Draw(this.cam.getX(), this.cam.getY(), canvas.width, canvas.height);
+		//Enemy draw method
+		this.enemy.Draw(this.cam.getX(), this.cam.getY());
+		//Call the map hud draw method
+		maps.DrawHUD(this.player.sanity);		
+	}
+	else if(game.gameState == game.states.Paused)
+	{
+		canvasCtx.fillStyle = "purple";
+		canvasCtx.font = "100px Georgia";
+		canvasCtx.fillText("Paused", canvas.width/2, canvas.height/2);
+	}
+	else if(game.gameState == game.states.Win)
+	{
+		canvasCtx.fillStyle = "purple";
+		canvasCtx.font = "100px Georgia";
+		canvasCtx.fillText("You got the supplies...", canvas.width/2 - 400, canvas.height/2 - 100);
+		canvasCtx.fillText("I guess that means you win...", canvas.width/2 - 400, canvas.height/2);
+		canvasCtx.fillText("...for now...", canvas.width/2 - 400, canvas.height/2 + 100);
+		
+	}
+	else if(game.gameState == game.states.Loss)
+	{
+		canvasCtx.fillStyle = "purple";
+		canvasCtx.font = "30px Georgia";
+		canvasCtx.fillText("You went insane, your body was found lifeless on the street at 6:23a.m", canvas.width/2 - 400, canvas.height/2 - 200);
+		canvasCtx.fillText("by an office worker on their daily commute.", canvas.width/2 - 400, canvas.height/2 - 100);
+		canvasCtx.fillText("Assumed suicide.", canvas.width/2 - 400, canvas.height/2);
+		canvasCtx.fillText("You Lose.", canvas.width/2 - 400, canvas.height/2);
+	}
 }

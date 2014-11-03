@@ -20,7 +20,7 @@ Enemy.prototype.onSight = function(inSight)
 {
 	this.seen = inSight;
 }
-Enemy.prototype.Update = function(playerPos)
+Enemy.prototype.Update = function(playerPos, playerDir, keys)
 {
 	if(this.seen == false)
 	{
@@ -30,6 +30,16 @@ Enemy.prototype.Update = function(playerPos)
 		velocity = new Vector2(this.speed * Math.cos(this.dir), this.speed * Math.sin(this.dir));
 		this.position.x += velocity.x;
 		this.position.y += velocity.y;
+	}
+	if(keys["back"] == true)
+	{
+		dist = Math.sqrt((dx * dx) + (dy * dy))
+		if(dist > 1000)
+		{
+			velocity = new Vector2(-(1000 * Math.cos(playerDir)), -(1000 * Math.sin(playerDir)));
+			this.position = new Vector2(playerPos.x + velocity.x, playerPos.y + velocity.y);
+		}
+		
 	}
 }
 
