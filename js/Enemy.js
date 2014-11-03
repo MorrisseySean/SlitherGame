@@ -24,8 +24,18 @@ Enemy.prototype.Update = function(playerPos, playerDir, keys)
 {
 	if(this.seen == false)
 	{
+		
 		dx = playerPos.x - this.position.x;
 		dy = playerPos.y - this.position.y;
+		dist = Math.sqrt((dx * dx) + (dy * dy))
+		if(dist > 1500)
+		{
+			if(Math.floor(Math.random() * 20) == 1)
+			{
+				velocity = new Vector2((dist * Math.cos(playerDir)), (dist * Math.sin(playerDir)));
+				this.position = new Vector2(playerPos.x + velocity.x, playerPos.y + velocity.y);
+			}
+		}
 		this.dir = Math.atan2(dy, dx);
 		velocity = new Vector2(this.speed * Math.cos(this.dir), this.speed * Math.sin(this.dir));
 		this.position.x += velocity.x;
@@ -33,7 +43,7 @@ Enemy.prototype.Update = function(playerPos, playerDir, keys)
 	}
 	if(keys["back"] == true)
 	{
-		dist = Math.sqrt((dx * dx) + (dy * dy))
+		
 		if(dist > 1000)
 		{
 			velocity = new Vector2(-(1000 * Math.cos(playerDir)), -(1000 * Math.sin(playerDir)));

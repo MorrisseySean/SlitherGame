@@ -213,6 +213,6 @@ Game.prototype.Draw = function()
 		canvasCtx.fillText("You went insane, your body was found lifeless on the street at 6:23a.m", canvas.width/2 - 400, canvas.height/2 - 200);
 		canvasCtx.fillText("by an office worker on their daily commute.", canvas.width/2 - 400, canvas.height/2 - 100);
 		canvasCtx.fillText("Assumed suicide.", canvas.width/2 - 400, canvas.height/2);
-		canvasCtx.fillText("You Lose.", canvas.width/2 - 400, canvas.height/2);
+		canvasCtx.fillText("You Lose.", canvas.width/2 - 400, canvas.height/2 + 100);
 	}
 }
