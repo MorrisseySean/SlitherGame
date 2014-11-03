@@ -9,6 +9,8 @@ function GameManager()
 	this.buildArray = [];
 	this.emptySquare = []
 	this.pickups = [];	
+	this.mapWidth = 0;
+	this.mapHeight = 0;
 }
 
 GameManager.prototype.init = function(size)
@@ -111,7 +113,11 @@ GameManager.prototype.GenerateMap = function(player)
 		{
 			this.map[j][i].GenerateBuilding();
 		}
-	}	
+	}
+
+	//Load map dimensions into a variable
+	this.mapWidth = (this.size * this.building[0][0].length) * this.map[0].length;
+	this.mapHeight = (this.size * this.building[0].length) * this.map.length;
 }
 
 GameManager.prototype.Draw = function(offsetX, offsetY)

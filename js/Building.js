@@ -35,9 +35,20 @@ Building.prototype.GeneratePickUps = function(pickups)
 }
 Building.prototype.Draw = function(offsetX, offsetY)
 {
+	//Draw the ground sprites
+	for(var i = 0; i < this.building.length; i++)
+	{
+		for(var j = 0; j < this.building[0].length; j++)
+		{
+				IMAGE.GROUNDSPRITE.draw(new Vector2((this.position.x + (j * this.size)) - offsetX, (this.position.y + (i * this.size)) - offsetY));			
+		}
+	}
+	//Draw walls
 	for(var i = 0; i < this.walls.length; i++)
 	{
-		canvasCtx.fillStyle = rgb(100, 100, 0);
-		canvasCtx.fillRect(this.walls[i].position.x - offsetX, this.walls[i].position.y - offsetY, this.walls[i].width, this.walls[i].height);
+		//canvasCtx.fillStyle = rgb(60, 60, 60);
+		this.walls[i].image.draw(new Vector2(this.walls[i].position.x - offsetX, this.walls[i].position.y - offsetY));
+		//canvasCtx.fillRect(this.walls[i].position.x - offsetX, this.walls[i].position.y - offsetY, this.walls[i].width, this.walls[i].height);
 	}
+	
 }

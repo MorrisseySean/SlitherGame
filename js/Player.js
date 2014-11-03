@@ -59,29 +59,49 @@ Player.prototype.walk = function(keys)
 	{
 		velocity = new Vector2(this.speed * Math.cos(this.dir), this.speed * Math.sin(this.dir));
 		this.position = new Vector2(this.position.x + velocity.x, this.position.y + velocity.y);
-		/*if(tempPos.x - this.radius  < 0)
+		//Check if the player is outside the map bounds.
+		if(this.position.x - this.radius  < 0)
 		{
-			tempPos.x = this.position.x;
+			this.position.x = this.radius;
 		}
-		if(tempPos.y - this.radius  < 0)
+		else if(this.position.x + this.radius > maps.mapWidth)
 		{
-			tempPos.y = this.position.y;
-		}*/
+			this.position.x = maps.mapWidth - (this.radius + 1);
+		}
+		if(this.position.y - this.radius  < 0)
+		{
+			this.position.y = this.radius;
+		}
+		else if(this.position.y + this.radius > maps.mapHeight)
+		{
+			this.position.y = maps.mapHeight - (this.radius + 1);
+		}
+		//Check for collision with walls
 		this.position = maps.DetectWallCollision(this.position, this.radius);
 	}
 	else if(keys["back"] == true)
 	{
-		velocity = new Vector2(-(this.speed * Math.cos(this.dir)), -(this.speed * Math.sin(this.dir)));
-		tempPos = new Vector2(this.position.x + velocity.x, this.position.y + velocity.y);
-		if(tempPos.x - this.radius  < 0)
+		velocity = new Vector2(-(this.speed/4 * Math.cos(this.dir)), -(this.speed/4 * Math.sin(this.dir)));
+		this.position = new Vector2(this.position.x + velocity.x, this.position.y + velocity.y);
+		//Check if the player is outside the map bounds.
+		if(this.position.x - this.radius  < 0)
 		{
-			tempPos.x = this.position.x;
+			this.position.x = this.radius;
 		}
-		if(tempPos.y - this.radius  < 0)
+		else if(this.position.x + this.radius > maps.mapWidth)
 		{
-			tempPos.y = this.position.y;
+			this.position.x = maps.mapWidth - this.radius;
 		}
-		this.position = maps.DetectWallCollision(this.position, velocity, this.radius);
+		if(this.position.y - this.radius  < 0)
+		{
+			this.position.y = this.radius;
+		}
+		else if(this.position.y + this.radius > maps.mapHeight)
+		{
+			this.position.y = maps.mapHeight - this.radius;
+		}
+		//Check for collision with walls
+		this.position = maps.DetectWallCollision(this.position, this.radius);
 	}
 	if (keys["right"] == true)
 	{
@@ -159,5 +179,5 @@ Player.prototype.Draw = function(offsetX, offsetY, screenWidth, screenHeight)
 	canvasCtx.closePath();
 	canvasCtx.fill();
 	this.image.rotateDraw(new Vector2(((this.position.x - this.radius) - offsetX), ((this.position.y - this.radius) - offsetY)), this.radius, this.radius, this.dir);
-	//this.flashlight.rotateDraw(new Vector2(((this.position.x - this.flashlight.width/2) - offsetX), ((this.position.y - this.flashlight.height/2) - offsetY)), (this.flashlight.width/2), this.flashlight.height/2 , this.dir);
+	this.flashlight.rotateDraw(new Vector2(((this.position.x - this.flashlight.width/2) - offsetX), ((this.position.y - this.flashlight.height/2) - offsetY)), (this.flashlight.width/2), this.flashlight.height/2 , this.dir);
 }
