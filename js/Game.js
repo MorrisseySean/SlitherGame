@@ -11,6 +11,10 @@ function Game()
 	//Sets up the camera
 	this.cam = new Camera();
 	
+	//Game states
+	this.states = { Paused : 0, Playing : 1, Win : 2, Loss : 3, Menu : 4 };
+	this.gameState = this.states.Playing;
+	
 	//Set up key map
 	this.keys = {};
 	this.keys["up"] = false;
@@ -99,7 +103,18 @@ function onKeyPress(e)
 	{
 		game.keys["right"] = true;
 	}
-	
+	//Pause and Unpause game.
+	else if(e.keyCode == 27)
+	{
+		if(game.gameState == game.states.Playing)
+		{
+			game.gameState = game.states.Paused;
+		}
+		else if(game.gameState == game.states.Paused)
+		{
+			game.gameState = game.states.Playing;
+		}
+	}
 }
 
 function onKeyUp(e)
@@ -130,13 +145,16 @@ Game.prototype.gameLoop = function()
 		{
 			playSound(game.sounds.gameLoop);
 		}
-		maps.PickUpItems(game.player.position, game.player.radius);
-		game.player.flashCheck(game.enemy);
-		game.player.walk(game.keys);
-		game.cam.update(game.player.getX(), game.player.getY());
-		game.enemy.Update(game.player.getPos());
-		game.audio.Update(game.player.getPos(), game.enemy.getPos(), game.sounds.gameLoop);
-		game.Draw();		
+		if(game.gameState == game.states.Playing) //If the game isn't paused
+		{
+			maps.PickUpItems(game.player.position, game.player.radius);
+			game.player.flashCheck(game.enemy);
+			game.player.walk(game.keys);
+			game.cam.update(game.player.getX(), game.player.getY());
+			game.enemy.Update(game.player.getPos());
+			game.audio.Update(game.player.getPos(), game.enemy.getPos(), game.sounds.gameLoop);
+			game.Draw();
+		}		
 	}
 	window.requestAnimFrame(game.gameLoop);
 }

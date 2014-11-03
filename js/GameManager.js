@@ -149,6 +149,22 @@ GameManager.prototype.DrawHUD = function(sanity)
 	canvasCtx.fillRect(1200, 10, 300 * sanity/100, 20);
 }
 
+GameManager.prototype.CheckWin = function()
+{
+	totalPickedUp = 0;
+	for(var k = 0; k < this.pickups.length; k++)
+	{
+		if(this.pickups[k].pickedUp == true)
+		{
+			totalPickedUp++;
+		}
+	}
+	if(totalPickedUp == this.pickups.length)
+	{
+		return true;
+	}
+	return false;
+}
 
 GameManager.prototype.FindMapIndex = function(pos, size)
 {
