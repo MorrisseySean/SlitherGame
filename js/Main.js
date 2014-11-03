@@ -18,4 +18,5 @@ function LoadAssets()
 	IMAGE.FLASHLIGHTSPRITE = new Sprite(window.innerWidth * 2, window.innerHeight * 4, "images/flashlight.png");
 	IMAGE.BATTERYSPRITE = new Sprite(IMAGE.GAMESIZE, IMAGE.GAMESIZE, "images/battery.png");
 	IMAGE.PILLSPRITE = new Sprite(IMAGE.GAMESIZE, IMAGE.GAMESIZE, "images/pills.png")
+	IMAGE.FOODSPRITE = new Sprite(IMAGE.GAMESIZE, IMAGE.GAMESIZE, "images/food.png");
 }

@@ -14,6 +14,11 @@ function PickUp(x, y, value, radius)
 		this.image = IMAGE.PILLSPRITE;		
 		this.value = 1;
 	}
+	else if(value = "food")
+	{
+		this.image = IMAGE.FOODSPRITE;
+		this.value = 2;
+	}
 	
 }
 

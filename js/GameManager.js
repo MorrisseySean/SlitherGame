@@ -18,6 +18,7 @@ GameManager.prototype.init = function(size)
 	//Pickups
 	this.pickups[this.pickups.length] = this.pills = new PickUp(0, 0, "pills", this.size/2);
 	this.pickups[this.pickups.length] = this.battery = new PickUp(0, 0, "battery", this.size/2);
+	this.pickups[this.pickups.length] = this.food = new PickUp(0, 0, "food", this.size/2);
 	
 	//Map squares
 	emptySquare = 	[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -39,11 +40,11 @@ GameManager.prototype.init = function(size)
 	
 	this.building[0] = 	[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 						[0, 1, 1, 1, 1, 1, 1, 1, 0, 0],
-						[0, 1, 0, 0, 0, 0, 0, 1, 0, 0],
+						[0, 1, 6, 0, 0, 0, 7, 1, 0, 0],
 						[0, 1, 0, 0, 0, 0, 0, 1, 0, 0],
 						[0, 0, 0, 1, 5, 1, 0, 1, 0, 0],
 						[0, 0, 0, 1, 1, 1, 0, 1, 0, 0],
-						[0, 1, 0, 1, 1, 1, 0, 1, 0, 0],
+						[0, 1, 0, 1, 5, 1, 0, 1, 0, 0],
 						[0, 1, 0, 0, 0, 0, 0, 1, 0, 0],
 						[0, 1, 1, 1, 1, 1, 0, 1, 0, 0],						
 						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
@@ -53,20 +54,20 @@ GameManager.prototype.init = function(size)
 						[0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
 						[0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
 						[0, 0, 0, 1, 1, 0, 0, 0, 1, 0],
-						[0, 0, 0, 1, 0, 6, 1, 0, 1, 0],
-						[0, 1, 0, 0, 0, 1, 1, 0, 0, 0],
+						[0, 0, 0, 1, 5, 6, 1, 0, 1, 0],
+						[0, 1, 0, 0, 7, 1, 1, 0, 0, 0],
 						[0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
 						[0, 1, 1, 1, 1, 1, 1, 1, 1, 0],						
 						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
 						
 	this.building[2] = 	[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 						[0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-						[0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
-						[0, 1, 0, 1, 0, 1, 0, 0, 1, 0],
-						[0, 0, 0, 1, 0, 1, 0, 1, 1, 0],
+						[0, 1, 5, 0, 0, 0, 0, 0, 1, 0],
+						[0, 1, 0, 1, 0, 1, 0, 0, 0, 0],
+						[0, 0, 0, 1, 7, 1, 0, 1, 1, 0],
 						[0, 0, 0, 1, 6, 1, 0, 1, 1, 0],
-						[0, 1, 0, 1, 0, 1, 0, 0, 1, 0],
-						[0, 1, 0, 0, 0, 0, 0, 0, 1, 0],
+						[0, 1, 0, 1, 7, 1, 0, 0, 0, 0],
+						[0, 1, 5, 0, 0, 0, 0, 0, 1, 0],
 						[0, 1, 1, 1, 1, 1, 1, 1, 1, 0],						
 						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
 						
@@ -180,21 +181,56 @@ GameManager.prototype.FindMapIndex = function(pos, size)
 
 GameManager.prototype.DetectWallCollision = function(pos, size)
 {
-	//For each wall in the current building square, check if the player collides with the wall.
+	//For each wall in the current building square, check if the player collides with the wall.	
 	mapPos = this.FindMapIndex(pos, size);
+	if(!mapPos)
+	{
+		var a =1;
+	}
 	wallArray = this.map[mapPos.x][mapPos.y].walls;
-	collides = false;
+	returnVec = pos;
+	xLock=false;
+	yLock=false;
+	xLO=0;
+	yLO=0;
 	for(var i = 0; i < wallArray.length; i++)
 	{
-		if(wallArray[i].position.x < pos.x + size &&
-		wallArray[i].position.x + wallArray[i].width > pos.x - size &&
-		wallArray[i].position.y < pos.y + size&&
-		wallArray[i].position.y + wallArray[i].width > pos.y - size)
+		wX1 = wallArray[i].position.x;
+		wX2 = wallArray[i].position.x + wallArray[i].width;
+		wY1 = wallArray[i].position.y;
+		wY2 = wallArray[i].position.y + wallArray[i].height;
+		if(wX1 < pos.x + size && wX2 > pos.x - size && wY1 < pos.y + size && wY2 > pos.y - size)
 		{
-			collides = true;
+			if(pos.x < wX1)
+			{
+				xOverlap = wX1 - (pos.x + size);
+			}
+			else
+			{
+				xOverlap = wX2 - (pos.x - size);
+			}
+			if(pos.y < wY1)
+			{
+				yOverlap = wY1 - (pos.y + size) ;
+			}
+			else
+			{
+				yOverlap = wY2 - (pos.y - size);
+			}
+			if(Math.abs(xOverlap) != Math.abs(yOverlap))
+			{
+				if(Math.abs(xOverlap) < Math.abs(yOverlap))
+				{
+					pos.x += xOverlap;
+				}
+				else
+				{
+					pos.y += yOverlap
+				}
+			}
 		}
 	}
-	return collides;
+	return pos;
 }
 
 GameManager.prototype.PickUpItems = function(pos, size)

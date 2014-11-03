@@ -200,7 +200,7 @@ Game.prototype.Draw = function()
 	else if(game.gameState == game.states.Win)
 	{
 		canvasCtx.fillStyle = "purple";
-		canvasCtx.font = "100px Georgia";
+		canvasCtx.font = "30px Georgia";
 		canvasCtx.fillText("You got the supplies...", canvas.width/2 - 400, canvas.height/2 - 100);
 		canvasCtx.fillText("I guess that means you win...", canvas.width/2 - 400, canvas.height/2);
 		canvasCtx.fillText("...for now...", canvas.width/2 - 400, canvas.height/2 + 100);

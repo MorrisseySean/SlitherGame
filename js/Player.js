@@ -58,19 +58,16 @@ Player.prototype.walk = function(keys)
 	if(keys["up"] == true)
 	{
 		velocity = new Vector2(this.speed * Math.cos(this.dir), this.speed * Math.sin(this.dir));
-		tempPos = new Vector2(this.position.x + velocity.x, this.position.y + velocity.y);
-		if(tempPos.x - this.radius  < 0)
+		this.position = new Vector2(this.position.x + velocity.x, this.position.y + velocity.y);
+		/*if(tempPos.x - this.radius  < 0)
 		{
 			tempPos.x = this.position.x;
 		}
 		if(tempPos.y - this.radius  < 0)
 		{
 			tempPos.y = this.position.y;
-		}
-		if(maps.DetectWallCollision(tempPos, this.radius) == false)
-		{
-			this.position = tempPos;
-		}
+		}*/
+		this.position = maps.DetectWallCollision(this.position, this.radius);
 	}
 	else if(keys["back"] == true)
 	{
@@ -84,10 +81,7 @@ Player.prototype.walk = function(keys)
 		{
 			tempPos.y = this.position.y;
 		}
-		if(maps.DetectWallCollision(tempPos, this.radius) == false)
-		{
-			this.position = tempPos;
-		}
+		this.position = maps.DetectWallCollision(this.position, velocity, this.radius);
 	}
 	if (keys["right"] == true)
 	{
@@ -165,5 +159,5 @@ Player.prototype.Draw = function(offsetX, offsetY, screenWidth, screenHeight)
 	canvasCtx.closePath();
 	canvasCtx.fill();
 	this.image.rotateDraw(new Vector2(((this.position.x - this.radius) - offsetX), ((this.position.y - this.radius) - offsetY)), this.radius, this.radius, this.dir);
-	this.flashlight.rotateDraw(new Vector2(((this.position.x - this.flashlight.width/2) - offsetX), ((this.position.y - this.flashlight.height/2) - offsetY)), (this.flashlight.width/2), this.flashlight.height/2 , this.dir);
+	//this.flashlight.rotateDraw(new Vector2(((this.position.x - this.flashlight.width/2) - offsetX), ((this.position.y - this.flashlight.height/2) - offsetY)), (this.flashlight.width/2), this.flashlight.height/2 , this.dir);
 }

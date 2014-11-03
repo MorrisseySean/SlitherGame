@@ -30,7 +30,7 @@ Enemy.prototype.Update = function(playerPos, playerDir, keys)
 		dist = Math.sqrt((dx * dx) + (dy * dy))
 		if(dist > 1500)
 		{
-			if(Math.floor(Math.random() * 20) == 1)
+			if(Math.floor(Math.random() * 2000) == 1)
 			{
 				velocity = new Vector2((dist * Math.cos(playerDir)), (dist * Math.sin(playerDir)));
 				this.position = new Vector2(playerPos.x + velocity.x, playerPos.y + velocity.y);
