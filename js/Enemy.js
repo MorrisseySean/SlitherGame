@@ -42,14 +42,13 @@ Enemy.prototype.Update = function(playerPos, playerDir, keys)
 		this.position.y += velocity.y;
 	}
 	if(keys["back"] == true)
-	{
-		
-		if(dist > 1000)
+	{		
+		/*if(dist > 1000)
 		{
 			velocity = new Vector2(-(1000 * Math.cos(playerDir)), -(1000 * Math.sin(playerDir)));
 			this.position = new Vector2(playerPos.x + velocity.x, playerPos.y + velocity.y);
 		}
-		
+		*/
 	}
 }
 

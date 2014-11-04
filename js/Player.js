@@ -4,7 +4,7 @@ function Player(x, y, radius, screenWidth, screenHeight)
 	this.position = new Vector2(x, y);
 	this.radius = radius;
 	//Set up speed and direction parameters
-	this.speed = 5;
+	this.speed = 3;
 	this.dir = 270 * Math.PI/180;
 	//Parameter for sanity
 	this.sanity = 100;
@@ -159,6 +159,11 @@ Player.prototype.flashCheck = function(enemy)
 	{
 		enemy.onSight(false);
 	}
+	dist = Math.sqrt(((enemy.position.x - this.position.x)*(enemy.position.x - this.position.x)) + ((enemy.position.y - this.position.y)*(enemy.position.y - this.position.y)));
+	if(dist < enemy.radius + this.radius)
+	{
+		this.sanity -= 10;
+	}
 }
 
 Player.prototype.CheckLoss = function()
@@ -170,7 +175,7 @@ Player.prototype.CheckLoss = function()
 	return false;
 }
 
-Player.prototype.Draw = function(offsetX, offsetY, screenWidth, screenHeight)
+Player.prototype.Draw = function(offsetX, offsetY)
 {
 	canvasCtx.fillStyle = rgb(0, 200, 0);
 	//draw a circle
@@ -178,6 +183,10 @@ Player.prototype.Draw = function(offsetX, offsetY, screenWidth, screenHeight)
 	canvasCtx.arc(this.position.x - offsetX, this.position.y - offsetY, this.radius, 0, Math.PI*2); 
 	canvasCtx.closePath();
 	canvasCtx.fill();
-	this.image.rotateDraw(new Vector2(((this.position.x - this.radius) - offsetX), ((this.position.y - this.radius) - offsetY)), this.radius, this.radius, this.dir);
+	this.image.rotateDraw(new Vector2(((this.position.x - this.radius) - offsetX), ((this.position.y - this.radius) - offsetY)), this.radius, this.radius, this.dir);	
+}
+
+Player.prototype.DrawFlashlight = function(offsetX, offsetY, screenWidth, screenHeight)
+{
 	this.flashlight.rotateDraw(new Vector2(((this.position.x - this.flashlight.width/2) - offsetX), ((this.position.y - this.flashlight.height/2) - offsetY)), (this.flashlight.width/2), this.flashlight.height/2 , this.dir);
 }

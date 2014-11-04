@@ -13,7 +13,11 @@ function Game()
 	
 	//Game states
 	this.states = { Paused : 0, Playing : 1, Win : 2, Loss : 3, Menu : 4 };
-	this.gameState = this.states.Playing;
+	this.gameState = this.states.Menu;
+	
+	//Menu states
+	this.menuSelect = 0;
+	this.menuStates = ["Play", "Options", "Survey", "BugReport"];	
 	
 	//Set up key map
 	this.keys = {};
@@ -107,6 +111,10 @@ function onKeyPress(e)
 	{
 		game.keys["back"] = true;
 	}
+	else if(e.keyCode == 13)
+	{
+		game.keys["enter"] = true;
+	}
 	//Pause and Unpause game.
 	else if(e.keyCode == 27)
 	{
@@ -119,6 +127,7 @@ function onKeyPress(e)
 			game.gameState = game.states.Playing;
 		}
 	}
+	
 }
 
 function onKeyUp(e)
@@ -126,22 +135,36 @@ function onKeyUp(e)
 	if (e.keyCode == 87 || e.keyCode == 38)
 	{		
 		game.keys["up"] = false;
-	}
-	
+		if(game.gameState == game.states.Menu)
+		{			
+			//Toggle through menu options
+			if(game.menuSelect - 1 < 0)
+			{
+				game.menuSelect = game.menuStates.length;
+			}
+			game.menuSelect = (game.menuSelect - 1)%game.menuStates.length;
+		}
+	}	
 	else if(e.keyCode == 65 || e.keyCode == 37)
 	{
-		game.keys["left"] = false;
-		
-	}
-		
+		game.keys["left"] = false;		
+	}		
 	else if(e.keyCode == 68||e.keyCode == 39)
 	{
-		game.keys["right"] = false;
-		
+		game.keys["right"] = false;		
+	}
+	else if(e.keyCode == 13)
+	{
+		game.keys["enter"] = false;
 	}
 	else if(e.keyCode == 83||e.keyCode == 40)
 	{
 		game.keys["back"] = false;
+		if(game.gameState == game.states.Menu)
+		{			
+			//Toggle through menu options
+			game.menuSelect = (game.menuSelect + 1)%game.menuStates.length;
+		}
 	}
 }
 
@@ -149,12 +172,36 @@ Game.prototype.gameLoop = function()
 {//Deals with all runtime events during gameplay
 	if(game.audio.isLoaded() == true)
 	{
-		if(game.sounds.gameLoop.playing == false)
+		if(game.gameState == game.states.Menu)
 		{
-			playSound(game.sounds.gameLoop);
-		}
+			if(game.keys["enter"] == true)
+			{
+				if(game.menuSelect == 0)
+				{
+					game.gameState = game.states.Playing;
+				}
+				else if(game.menuSelect == 1)
+				{
+					//options screen
+				}
+				else if(game.menuSelect == 2)
+				{
+					window.open("http://goo.gl/forms/lxTR0n0i7X");
+				}
+				else if(game.menuSelect == 3)
+				{
+					window.open("http://goo.gl/forms/0jtjXSGRZ5");
+				}
+				game.keys["enter"] = false;
+				
+			}
+		}		
 		if(game.gameState == game.states.Playing) //If the game is running and unpaused
 		{
+			if(game.sounds.gameLoop.playing == false)
+			{
+				playSound(game.sounds.gameLoop);
+			}
 			if(maps.CheckWin())
 			{
 				game.gameState = game.states.Win;
@@ -185,9 +232,11 @@ Game.prototype.Draw = function()
 		//Call map draw method
 		maps.Draw(this.cam.getX(), this.cam.getY());
 		//Call player draw method
-		this.player.Draw(this.cam.getX(), this.cam.getY(), canvas.width, canvas.height);
+		this.player.Draw(this.cam.getX(), this.cam.getY());
 		//Enemy draw method
 		this.enemy.Draw(this.cam.getX(), this.cam.getY());
+		//Draws the flashlight
+		this.player.DrawFlashlight(this.cam.getX(), this.cam.getY(), canvas.width, canvas.height);
 		//Call the map hud draw method
 		maps.DrawHUD(this.player.sanity);		
 	}
@@ -214,5 +263,19 @@ Game.prototype.Draw = function()
 		canvasCtx.fillText("by an office worker on their daily commute.", canvas.width/2 - 400, canvas.height/2 - 100);
 		canvasCtx.fillText("Assumed suicide.", canvas.width/2 - 400, canvas.height/2);
 		canvasCtx.fillText("You Lose.", canvas.width/2 - 400, canvas.height/2 + 100);
+	}
+	else if(game.gameState == game.states.Menu)
+	{
+		canvasCtx.font = "30px Georgia";		
+		for(i = 0; i < game.menuStates.length;i++)
+		{
+			canvasCtx.fillStyle = "purple";
+			if(i == game.menuSelect)
+			{
+				canvasCtx.fillStyle = "white";
+			}
+			canvasCtx.fillText(game.menuStates[i], canvas.width/2 - 200, canvas.height/2 - 200 + (100 * i));
+			
+		}		
 	}
 }
