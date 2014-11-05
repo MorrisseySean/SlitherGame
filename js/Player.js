@@ -14,7 +14,10 @@ function Player(x, y, radius, screenWidth, screenHeight)
 	
 }
 
-
+Player.prototype.reset = function()
+{
+	
+}
 ///////////////////////Get Methods///////////////////////////
 Player.prototype.getX = function()
 {//Returns the x position of the player
@@ -160,9 +163,10 @@ Player.prototype.flashCheck = function(enemy)
 		enemy.onSight(false);
 	}
 	dist = Math.sqrt(((enemy.position.x - this.position.x)*(enemy.position.x - this.position.x)) + ((enemy.position.y - this.position.y)*(enemy.position.y - this.position.y)));
-	if(dist < enemy.radius + this.radius)
+	//If the enemy has caught the player, reduce sanity very fast
+	if(dist < (enemy.radius * 0.6) + this.radius)
 	{
-		this.sanity -= 10;
+		this.sanity -= 5;
 	}
 }
 

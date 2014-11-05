@@ -3,10 +3,10 @@ var canvasCtx, audioCtx, maps;
 function Game()
 {
 	//Initialise player
-	this.player = new Player(0,0, 50);
+	this.player = new Player(0,0, GAMESIZE/2);
 	
 	//Initialise enemy
-	this.enemy = new Enemy(5000, 50, 80);
+	this.enemy = new Enemy(5000, 50, GAMESIZE);
 	
 	//Sets up the camera
 	this.cam = new Camera();
@@ -39,6 +39,8 @@ function Game()
 	this.GAMESIZE = 50;
 	
 }
+
+//////////////////////Initialise methods///////////////////////////////
 Game.prototype.init = function()
 {
 	this.initAudio();
@@ -48,10 +50,10 @@ Game.prototype.init = function()
 Game.prototype.initGame = function()
 {
 	maps = new GameManager();
-	maps.init(IMAGE.GAMESIZE * 2);
+	maps.init(GAMESIZE * 2);
 	maps.GenerateMap(this.player);
 	this.enemy.Load();	
-	this.cam.init(10000, 10000, canvas.width, canvas.height);	
+	this.cam.init(maps.mapWidth, maps.mapHeight, canvas.width, canvas.height);	
 	
 }
 
@@ -86,6 +88,7 @@ Game.prototype.initAudio = function()
 	this.audio = new AudioManager();
 	this.audio.Load(this.sounds.gameLoop)
 }
+/////////////////////////////////////////////////////////////////////////////
 
 function onResize(e)
 {
@@ -93,6 +96,7 @@ function onResize(e)
 	canvas.width = window.innerWidth - 20;
 	canvas.height = window.innerHeight - 20;
 }
+
 function onKeyPress(e)
 {//Places user input into the keys map
 	if (e.keyCode == 87 || e.keyCode == 38)
@@ -168,6 +172,13 @@ function onKeyUp(e)
 	}
 }
 
+Game.prototype.reset = function()
+{
+	this.player = new Player(0,0, GAMESIZE/2);
+	this.enemy = new Enemy(5000, 50, GAMESIZE);
+	maps.init(GAMESIZE * 2);
+	maps.GenerateMap(this.player);
+}
 Game.prototype.gameLoop = function()
 {//Deals with all runtime events during gameplay
 	if(game.audio.isLoaded() == true)
@@ -179,6 +190,7 @@ Game.prototype.gameLoop = function()
 			{
 				if(game.menuSelect == 0)
 				{
+					game.reset();
 					game.gameState = game.states.Playing;
 				}
 				else if(game.menuSelect == 1)

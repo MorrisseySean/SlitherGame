@@ -43,12 +43,12 @@ Enemy.prototype.Update = function(playerPos, playerDir, keys)
 	}
 	if(keys["back"] == true)
 	{		
-		/*if(dist > 1000)
+		if(dist > 600)
 		{
-			velocity = new Vector2(-(1000 * Math.cos(playerDir)), -(1000 * Math.sin(playerDir)));
+			velocity = new Vector2(-(600 * Math.cos(playerDir)), -(600 * Math.sin(playerDir)));
 			this.position = new Vector2(playerPos.x + velocity.x, playerPos.y + velocity.y);
 		}
-		*/
+		
 	}
 }
 

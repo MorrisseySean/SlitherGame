@@ -35,9 +35,7 @@ AudioManager.prototype.Update = function(playerPos, enemyPos, gameLoop)
 	else
 	{
 		AUDIO.setVolume(gameLoop, 2 - (dist/1500));
-	}
-	
-	
+	}	
 }
 
 function playSound(obj)
