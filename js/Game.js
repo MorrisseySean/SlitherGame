@@ -12,12 +12,12 @@ function Game()
 	this.cam = new Camera();
 	
 	//Game states
-	this.states = { Paused : 0, Playing : 1, Win : 2, Loss : 3, Menu : 4 };
+	this.states = { Paused : 0, Playing : 1, Win : 2, Loss : 3, Menu : 4, HowTo : 5};
 	this.gameState = this.states.Menu;
 	
 	//Menu states
 	this.menuSelect = 0;
-	this.menuStates = ["Play", "Options", "Survey", "BugReport"];	
+	this.menuStates = ["Play", "How To Play", "Survey", "BugReport"];	
 	
 	//Set up key map
 	this.keys = {};
@@ -174,6 +174,7 @@ Game.prototype.gameLoop = function()
 	{
 		if(game.gameState == game.states.Menu)
 		{
+			//Pressing enter brings you to the highlighted screen.
 			if(game.keys["enter"] == true)
 			{
 				if(game.menuSelect == 0)
@@ -182,7 +183,7 @@ Game.prototype.gameLoop = function()
 				}
 				else if(game.menuSelect == 1)
 				{
-					//options screen
+					game.gameState = game.states.HowTo;
 				}
 				else if(game.menuSelect == 2)
 				{
@@ -195,8 +196,8 @@ Game.prototype.gameLoop = function()
 				game.keys["enter"] = false;
 				
 			}
-		}		
-		if(game.gameState == game.states.Playing) //If the game is running and unpaused
+		}
+		else if(game.gameState == game.states.Playing) //If the game is running and unpaused
 		{
 			if(game.sounds.gameLoop.playing == false)
 			{
@@ -216,6 +217,15 @@ Game.prototype.gameLoop = function()
 			game.cam.update(game.player.getX(), game.player.getY());
 			game.enemy.Update(game.player.getPos(), game.player.getDir(), game.keys);
 			game.audio.Update(game.player.getPos(), game.enemy.getPos(), game.sounds.gameLoop);			
+		}
+		else if(game.gameState == game.states.Loss || game.gameState == game.states.Win || game.gameState == game.states.HowTo)
+		{
+			//If looking at the loss, win or instructions screen, pressing enter will return you to the menu screen
+			if(game.keys["enter"] == true)
+			{
+				game.keys["enter"] = false;
+				game.gameState = game.states.Menu;
+			}
 		}
 		game.Draw();		
 	}
@@ -266,7 +276,7 @@ Game.prototype.Draw = function()
 	}
 	else if(game.gameState == game.states.Menu)
 	{
-		canvasCtx.font = "30px Georgia";		
+		canvasCtx.font = "30px Georgia";					
 		for(i = 0; i < game.menuStates.length;i++)
 		{
 			canvasCtx.fillStyle = "purple";
@@ -276,6 +286,20 @@ Game.prototype.Draw = function()
 			}
 			canvasCtx.fillText(game.menuStates[i], canvas.width/2 - 200, canvas.height/2 - 200 + (100 * i));
 			
-		}		
+		}	
+				
+	}
+	else if(game.gameState == game.states.HowTo)
+	{
+		canvasCtx.font = "20px Georgia";
+		canvasCtx.fillStyle = "purple";
+		canvasCtx.fillText("CONTROLS", canvas.width/2 - 350, canvas.height/2 - 250);
+		canvasCtx.fillText("Move Forward - W/Up Arrow", canvas.width/2 - 300, canvas.height/2 - 200);
+		canvasCtx.fillText("Turn Left - A/Left Arrow", canvas.width/2 - 300, canvas.height/2 - 150);
+		canvasCtx.fillText("Turn Right - D/Right Arrow", canvas.width/2 - 300, canvas. height/2 - 100);
+		canvasCtx.fillText("Pause - Esc", canvas.width/2 - 300, canvas. height/2  - 50);
+		canvasCtx.fillText("INSTRUCTIONS", canvas.width/2 - 350, canvas.height/2 + 50);
+		canvasCtx.fillText("Search for the supplies", canvas.width/2 - 300, canvas.height/2 + 100);
+		canvasCtx.fillText("Stay away from it, Don't look at it, RUN!", canvas.width/2 - 300, canvas.height/2 + 150);
 	}
 }
