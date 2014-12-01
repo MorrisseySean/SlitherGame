@@ -14,6 +14,7 @@ function LoadAssets()
 {	
 	IMAGE.NOTE = new Sprite(window.innerWidth, window.innerHeight, "images/note.png");
 	IMAGE.GROUNDSPRITE = new Sprite(GAMESIZE * 2, GAMESIZE * 2, "images/ground.png");
+	IMAGE.FLOORSPRITE = new Sprite(GAMESIZE * 2, GAMESIZE * 2, "images/wood.png");
 	IMAGE.WALLSPRITE = new Sprite(GAMESIZE * 2, GAMESIZE * 2, "images/wall.png");
 	IMAGE.PLAYERSPRITE = new Sprite(GAMESIZE, GAMESIZE, "images/player.png");
 	IMAGE.ENEMYSPRITE = new Sprite(GAMESIZE * 2, GAMESIZE * 2, "images/monster.png");

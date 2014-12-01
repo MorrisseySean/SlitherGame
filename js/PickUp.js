@@ -60,7 +60,7 @@ PickUp.prototype.Place = function(x, y)
 	//Method for placing the pickup on the map
 	if(this.placed == false) //Don't move the object once placed
 	{
-		if(Math.floor(Math.random() * 30) == 1)//One in 30 chance of the object being placed in this position
+		if(Math.floor(Math.random() * 200) == 1)//One in 30 chance of the object being placed in this position
 		{
 			//Place the object at desired position and set it to placed.
 			this.position = new Vector2(x, y);

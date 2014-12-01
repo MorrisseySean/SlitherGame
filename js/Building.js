@@ -40,7 +40,14 @@ Building.prototype.Draw = function(offsetX, offsetY)
 	{
 		for(var j = 0; j < this.building[0].length; j++)
 		{
-				IMAGE.GROUNDSPRITE.draw(new Vector2((this.position.x + (j * this.size)) - offsetX, (this.position.y + (i * this.size)) - offsetY));			
+			if(this.building[j][i] < 1)
+			{
+				IMAGE.GROUNDSPRITE.draw(new Vector2((this.position.x + (j * this.size)) - offsetX, (this.position.y + (i * this.size)) - offsetY));	
+			}	
+			else
+			{
+				IMAGE.FLOORSPRITE.draw(new Vector2((this.position.x + (j * this.size)) - offsetX, (this.position.y + (i * this.size)) - offsetY));	
+			}
 		}
 	}
 	//Draw walls
