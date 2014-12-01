@@ -51,7 +51,7 @@ GameManager.prototype.init = function(size)
 						[0, 2, 2, 1, 1, 1, 2, 1, 0, 0],
 						[0, 1, 2, 1, 10, 1, 2, 1, 0, 0],
 						[0, 1, 6, 2, 2, 2, 2, 1, 0, 0],
-						[0, 1, 1, 1, 1, 1, 0, 1, 0, 0],						
+						[0, 1, 1, 1, 1, 1, 2, 1, 0, 0],						
 						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
 					
 	this.building[1] = 	[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -96,7 +96,7 @@ GameManager.prototype.GenerateMap = function(player)
 	{
 		for(var j = 0; j < this.map[i].length; j++)
 		{
-			if(j == Math.ceil(this.map.length/2) && i == Math.ceil(this.map[j].length/2)) //Make the central building the starting building
+			if(j == Math.floor(this.map.length/2) && i == Math.floor(this.map[j].length/2)) //Make the central building the starting building
 			{
 				this.map[j][i] = new Building(j * this.size * this.building[0].length, i * this.size * this.building[0].length, this.size, this.building[3]);
 				player.setPos((j * this.size * this.building[0].length) + (this.size * (this.building[0].length/2)), i * this.size * this.building[0].length + (this.size * (this.building[0].length/2)));
@@ -249,9 +249,9 @@ GameManager.prototype.PickUpItems = function(pos, size)
 	{
 		if(this.pickups[i].getPlaced() == true)
 		{
-			dx = pos.x - (this.pickups[i].getPos().x + this.pickups[i].size/2);
-			dy = pos.y - (this.pickups[i].getPos().y + this.pickups[i].size/2);		
-			if(Math.sqrt((dx * dx) + (dy * dy)) < (size/3 + this.size/3))
+			dx = pos.x - (this.pickups[i].getPos().x + this.size/2);
+			dy = pos.y - (this.pickups[i].getPos().y + this.size/2);		
+			if(Math.sqrt((dx * dx) + (dy * dy)) < (this.size/2))
 			{
 				//If the two collide, set the pickup to be picked up.
 				this.pickups[i].pickedUp = true;
