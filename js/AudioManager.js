@@ -4,6 +4,7 @@ function AudioManager()
 	AUDIO = this;
 	this.audioBuffer;
 	this.loaded = false;
+	this.source = 0;
 }
 
 AudioManager.prototype.Load = function(obj)
@@ -41,22 +42,28 @@ AudioManager.prototype.Update = function(playerPos, enemyPos, gameLoop)
 function playSound(obj)
 {
 	//Sets up the sound with the object properties and sets it to play.
-	var source = audioCtx.createBufferSource();
+	this.source = audioCtx.createBufferSource();
 	//Get the object buffer.
-	source.buffer = obj.buffer;
+	this.source.buffer = obj.buffer;
 	//Set the sound to looping or not
-	source.loop = obj.loop;
+	this.source.loop = obj.loop;
 	//Add volume controller
 	obj.gainNode = audioCtx.createGain();
 	obj.gainNode.gain.value = obj.volume;
-	source.connect(obj.gainNode);
+	this.source.connect(obj.gainNode);
 	//Connect and play the sound starting from 0.
 	obj.gainNode.connect(audioCtx.destination);		
-	source.start(0);
+	this.source.start(0);
 	
 	//Tell the object it has started
 	obj.playing = true;
 }
+
+function stop() 
+{
+    this.source.noteOff(audioCtx.currentTime); // stop the source immediately
+}
+
 AudioManager.prototype.setVolume = function(obj, change)
 {
 	obj.gainNode.gain.value = Math.min(2,change);

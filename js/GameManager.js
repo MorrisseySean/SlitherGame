@@ -21,6 +21,9 @@ GameManager.prototype.init = function(size)
 	this.pickups[this.pickups.length] = this.pills = new PickUp(0, 0, "pills", this.size/2);
 	this.pickups[this.pickups.length] = this.battery = new PickUp(0, 0, "battery", this.size/2);
 	this.pickups[this.pickups.length] = this.food = new PickUp(0, 0, "food", this.size/2);
+	this.pickups[this.pickups.length] = this.bandage = new PickUp(0, 0, "bandage", this.size/2);
+	this.pickups[this.pickups.length] = this.lighter = new PickUp(0, 0, "lighter", this.size/2);
+	this.pickups[this.pickups.length] = this.water = new PickUp(0, 0, "water", this.size/2);
 	
 	//Map squares
 	emptySquare = 	[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -42,33 +45,33 @@ GameManager.prototype.init = function(size)
 	
 	this.building[0] = 	[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 						[0, 1, 1, 1, 1, 1, 1, 1, 0, 0],
-						[0, 1, 6, 0, 0, 0, 7, 1, 0, 0],
+						[0, 1, 7, 0, 8, 0, 9, 1, 0, 0],
 						[0, 1, 0, 0, 0, 0, 0, 1, 0, 0],
 						[0, 0, 0, 1, 5, 1, 0, 1, 0, 0],
 						[0, 0, 0, 1, 1, 1, 0, 1, 0, 0],
-						[0, 1, 0, 1, 5, 1, 0, 1, 0, 0],
-						[0, 1, 0, 0, 0, 0, 0, 1, 0, 0],
+						[0, 1, 0, 1, 10, 1, 0, 1, 0, 0],
+						[0, 1, 6, 0, 0, 0, 0, 1, 0, 0],
 						[0, 1, 1, 1, 1, 1, 0, 1, 0, 0],						
 						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
 					
 	this.building[1] = 	[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 						[0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-						[0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+						[0, 0, 0, 0, 6, 0, 0, 10, 1, 0],
 						[0, 0, 0, 1, 1, 0, 0, 0, 1, 0],
-						[0, 0, 0, 1, 5, 6, 1, 0, 1, 0],
-						[0, 1, 0, 0, 7, 1, 1, 0, 0, 0],
-						[0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+						[0, 0, 0, 1, 5, 8, 1, 0, 1, 0],
+						[0, 1, 0, 0, 9, 1, 1, 0, 0, 0],
+						[0, 1, 7, 0, 0, 0, 0, 0, 0, 0],
 						[0, 1, 1, 1, 1, 1, 1, 1, 1, 0],						
 						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];
 						
 	this.building[2] = 	[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 						[0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-						[0, 1, 5, 0, 0, 0, 0, 0, 1, 0],
-						[0, 1, 0, 1, 0, 1, 0, 0, 0, 0],
+						[0, 1, 6, 0, 0, 0, 0, 0, 1, 0],
+						[0, 1, 0, 1, 9, 1, 0, 0, 0, 0],
+						[0, 0, 0, 1, 8, 1, 0, 1, 1, 0],
 						[0, 0, 0, 1, 7, 1, 0, 1, 1, 0],
-						[0, 0, 0, 1, 6, 1, 0, 1, 1, 0],
-						[0, 1, 0, 1, 7, 1, 0, 0, 0, 0],
+						[0, 1, 0, 1, 10, 1, 0, 0, 0, 0],
 						[0, 1, 5, 0, 0, 0, 0, 0, 1, 0],
 						[0, 1, 1, 1, 1, 1, 1, 1, 1, 0],						
 						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]];

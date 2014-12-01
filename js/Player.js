@@ -18,6 +18,7 @@ Player.prototype.reset = function()
 {
 	
 }
+
 ///////////////////////Get Methods///////////////////////////
 Player.prototype.getX = function()
 {//Returns the x position of the player
@@ -120,7 +121,7 @@ Player.prototype.walk = function(keys)
 Player.prototype.turnLeft = function()
 {
 	this.dir *= (180/Math.PI);
-	this.dir -= 1;
+	this.dir -= 1.5;
 	if(this.dir < 0)
 	{
 		this.dir += 360;
@@ -130,7 +131,7 @@ Player.prototype.turnLeft = function()
 Player.prototype.turnRight = function()
 {
 	this.dir *= (180/Math.PI);
-	this.dir += 1;
+	this.dir += 1.5;
 	this.dir %= 360;
 	this.dir *= (Math.PI/180);
 }

@@ -12,7 +12,7 @@ function Game()
 	this.cam = new Camera();
 	
 	//Game states
-	this.states = { Paused : 0, Playing : 1, Win : 2, Loss : 3, Menu : 4, HowTo : 5};
+	this.states = { Paused : 0, Playing : 1, Win : 2, Loss : 3, Menu : 4, HowTo : 5, Note : 6};
 	this.gameState = this.states.Menu;
 	
 	//Menu states
@@ -44,12 +44,13 @@ function Game()
 Game.prototype.init = function()
 {
 	this.initAudio();
-	this.initCanvas();	
-	this.initGame();
+	this.initCanvas();
+	maps = new GameManager();	
+	//this.initGame();
 }
 Game.prototype.initGame = function()
 {
-	maps = new GameManager();
+	
 	maps.init(GAMESIZE * 2);
 	maps.GenerateMap(this.player);
 	this.enemy.Load();	
@@ -176,8 +177,9 @@ Game.prototype.reset = function()
 {
 	this.player = new Player(0,0, GAMESIZE/2);
 	this.enemy = new Enemy(5000, 50, GAMESIZE);
-	maps.init(GAMESIZE * 2);
-	maps.GenerateMap(this.player);
+	//maps.init(GAMESIZE * 2);
+	//maps.GenerateMap(this.player);
+	this.initGame();
 }
 Game.prototype.gameLoop = function()
 {//Deals with all runtime events during gameplay
@@ -191,15 +193,15 @@ Game.prototype.gameLoop = function()
 				if(game.menuSelect == 0)
 				{
 					game.reset();
-					game.gameState = game.states.Playing;
-				}
+					game.gameState = game.states.Note;
+				}				
 				else if(game.menuSelect == 1)
 				{
 					game.gameState = game.states.HowTo;
 				}
 				else if(game.menuSelect == 2)
 				{
-					window.open("http://goo.gl/forms/lxTR0n0i7X");
+					window.open("https://docs.google.com/forms/d/1pguXN83jDYY4XGJy-dkIahuRHwAHa5J-lFSLrR-lSCY/viewform");
 				}
 				else if(game.menuSelect == 3)
 				{
@@ -207,6 +209,15 @@ Game.prototype.gameLoop = function()
 				}
 				game.keys["enter"] = false;
 				
+			}
+		}
+		else if(game.gameState == game.states.Note)
+		{
+			IMAGE.NOTE.draw(new Vector2(0, 0));
+			if(game.keys["enter"] == true)
+			{
+				game.gameState = game.states.Playing;				
+				game.keys["enter"] = false;
 			}
 		}
 		else if(game.gameState == game.states.Playing) //If the game is running and unpaused
@@ -236,6 +247,7 @@ Game.prototype.gameLoop = function()
 			if(game.keys["enter"] == true)
 			{
 				game.keys["enter"] = false;
+				//stop();
 				game.gameState = game.states.Menu;
 			}
 		}
@@ -268,11 +280,15 @@ Game.prototype.Draw = function()
 		canvasCtx.font = "100px Georgia";
 		canvasCtx.fillText("Paused", canvas.width/2, canvas.height/2);
 	}
+	else if(game.gameState == game.states.Note)
+	{
+		IMAGE.NOTE.draw(new Vector2(0, 0));
+	}
 	else if(game.gameState == game.states.Win)
 	{
 		canvasCtx.fillStyle = "purple";
 		canvasCtx.font = "30px Georgia";
-		canvasCtx.fillText("You got the supplies...", canvas.width/2 - 400, canvas.height/2 - 100);
+		canvasCtx.fillText("End of the alpha build...", canvas.width/2 - 400, canvas.height/2 - 100);
 		canvasCtx.fillText("I guess that means you win...", canvas.width/2 - 400, canvas.height/2);
 		canvasCtx.fillText("...for now...", canvas.width/2 - 400, canvas.height/2 + 100);
 		

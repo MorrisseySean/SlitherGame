@@ -41,7 +41,7 @@ Enemy.prototype.Update = function(playerPos, playerDir, keys)
 		this.position.x += velocity.x;
 		this.position.y += velocity.y;
 	}
-	if(keys["back"] == true)
+	/*if(keys["back"] == true)
 	{		
 		if(dist > 600)
 		{
@@ -49,7 +49,7 @@ Enemy.prototype.Update = function(playerPos, playerDir, keys)
 			this.position = new Vector2(playerPos.x + velocity.x, playerPos.y + velocity.y);
 		}
 		
-	}
+	}*/
 }
 
 Enemy.prototype.Draw = function(offsetX, offsetY)
